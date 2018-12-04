@@ -488,7 +488,7 @@ public class JavaParser
         return new ExpressionCast(type, increment);
     }
 
-    @ParserRule("increment -> newKeyword member")
+    @ParserRule("cast -> newKeyword member")
     public static ExpressionNew dslkds(Expression member)
     {
         return new ExpressionNew(member);

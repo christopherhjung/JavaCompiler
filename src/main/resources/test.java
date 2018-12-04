@@ -7,8 +7,5 @@ class Text
 
         String a = new String(3 + 4);
 
-
-
-        int a = 3 + 4 - (2+ 3).test.lol("halo");
     }
 }
