@@ -3,11 +3,11 @@ package com.christophejung.statements;
 
 import com.christophejung.methodexpressions.MethodExpression;
 
-public class StatementIncrement implements Statement, MethodExpression
+public class StatementPreDecrement implements Statement, MethodExpression
 {
     private Statement left;
 
-    public StatementIncrement(Statement left)
+    public StatementPreDecrement(Statement left)
     {
         this.left = left;
     }
@@ -15,6 +15,6 @@ public class StatementIncrement implements Statement, MethodExpression
     @Override
     public String toString()
     {
-        return left + "++";
+        return "--" + left;
     }
 }

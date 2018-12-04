@@ -2,17 +2,15 @@ package com.christophejung.methodexpressions;
 
 import com.christophejung.statements.Statement;
 
-import java.util.List;
-
 public class IfExpression implements MethodExpression
 {
     private Statement condition;
-    private List<MethodExpression> expressions;
+    private MethodExpression expression;
 
-    public IfExpression(Statement condition, List<MethodExpression> expressions)
+    public IfExpression(Statement condition, MethodExpression expression)
     {
         this.condition = condition;
-        this.expressions = expressions;
+        this.expression = expression;
     }
 
     @Override
@@ -22,16 +20,9 @@ public class IfExpression implements MethodExpression
 
         sb.append("if(");
         sb.append(condition);
-        sb.append("){");
+        sb.append(")");
 
-        for (MethodExpression expression : expressions)
-        {
-            sb.append(expression);
-            sb.append(';');
-        }
-
-        sb.append("}");
-
+        sb.append(expression);
         return sb.toString();
     }
 }

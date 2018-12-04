@@ -1,5 +1,6 @@
 package com.christophejung.classexpressions;
 
+import com.christophejung.Block;
 import com.christophejung.methodexpressions.Declare;
 import com.christophejung.methodexpressions.MethodExpression;
 
@@ -9,15 +10,15 @@ public class MethodContainer implements ClassExpression
 {
     private String methodName;
     private String returnType;
-    private List<MethodExpression> methodMethodExpressions;
+    private Block expression;
     private List<Declare> declarations;
 
-    public MethodContainer(String methodName, String returnType, List<Declare> declarations, List<MethodExpression> methodMethodExpressions)
+    public MethodContainer(String methodName, String returnType, List<Declare> declarations, Block expression)
     {
         this.methodName = methodName;
         this.returnType = returnType;
         this.declarations = declarations;
-        this.methodMethodExpressions = methodMethodExpressions;
+        this.expression = expression;
     }
 
     @Override
@@ -41,16 +42,9 @@ public class MethodContainer implements ClassExpression
             firstArgument = true;
         }
 
-        sb.append("){");
+        sb.append(")");
 
-        for (MethodExpression methodExpression : methodMethodExpressions)
-        {
-            sb.append(methodExpression);
-            sb.append(';');
-        }
-
-        sb.append("}");
-
+        sb.append(expression);
 
         return sb.toString();
     }

@@ -7,35 +7,75 @@ import com.christophejung.methodexpressions.*;
 import com.christophejung.statements.*;
 import com.christopherjung.reflectparser.*;
 
-import java.beans.Expression;
 import java.util.ArrayList;
 import java.util.List;
 
 public class JavaParser
 {
     @ScannerSingle
-    public static String structureChars = "[](){},:;*/";
+    public static String structureChars = "[](){},:;.";
+
+    @ScannerIgnore
+    public static String ignore = "\\s+";
+
+    @ScannerToken("*=")
+    public static String multiplyAssign = "\\*\\=";
+
+    @ScannerToken("*")
+    public static String multiply = "\\*";
+
+    @ScannerToken("/=")
+    public static String divideAssign = "\\/\\=";
+
+    @ParserIgnore
+    @ScannerToken
+    public static String comment = "\\/\\*([^*]|\\*+[^*\\/])*\\*+\\/";
+
+    @ParserIgnore
+    @ScannerToken
+    public static String singleLineComment = "\\/\\/[^\n]+";
+
+    @ScannerToken("/")
+    public static String divide = "\\/";
 
     @ScannerToken("||")
     public static String booleanOr = "\\|\\|";
 
+    @ScannerToken("||=")
+    public static String booleanOrAssign = "\\|\\|\\=";
+
     @ScannerToken("|")
     public static String bitwiseOr = "\\|";
+
+    @ScannerToken("|=")
+    public static String bitwiseOrAssign = "\\|\\=";
 
     @ScannerToken("&&")
     public static String booleanAnd = "\\&\\&";
 
+    @ScannerToken("&&=")
+    public static String booleanAndAssign = "\\&\\&\\=";
+
     @ScannerToken("&")
     public static String bitwiseAnd = "\\&";
 
+    @ScannerToken("&=")
+    public static String bitwiseAndAssign = "\\&\\=";
+
     @ScannerToken("++")
     public static String increment = "\\+\\+";
+
+    @ScannerToken("+=")
+    public static String addAssign = "\\+\\=";
 
     @ScannerToken("+")
     public static String add = "\\+";
 
     @ScannerToken("--")
     public static String decrement = "\\-\\-";
+
+    @ScannerToken("-=")
+    public static String decrementAssign = "\\-\\=";
 
     @ScannerToken("-")
     public static String sub = "\\-";
@@ -58,8 +98,14 @@ public class JavaParser
     @ScannerToken(">>")
     public static String shiftRight = ">>";
 
+    @ScannerToken(">>=")
+    public static String shiftRightAssign = ">>=";
+
     @ScannerToken("<<")
     public static String shiftLeft = "<<";
+
+    @ScannerToken("<<=")
+    public static String shiftLeftAssign = "<<=";
 
     @ScannerToken(">")
     public static String greater = ">";
@@ -83,10 +129,10 @@ public class JavaParser
     public static String forKeyword = "for";
 
     @ScannerToken
-    public static String visibility = "public|private|protected";
+    public static String newKeyword = "new";
 
-    @ScannerIgnore
-    public static String ignore = "\\s+";
+    @ScannerToken
+    public static String visibility = "public|private|protected";
 
     @ScannerToken
     public static String number = "[-+]?[0-9]+(\\.[0-9]+)?([eE][+-]?[0-9]+)?";
@@ -96,6 +142,8 @@ public class JavaParser
 
     @ScannerToken
     public static String word = "[a-zA-Z]\\w*";
+
+
 
 
     @ParserRoot("clazz:class EOF")
@@ -129,7 +177,7 @@ public class JavaParser
         return classDeclareAssign;
     }
 
-    @ParserRule("classDeclareAssign -> varType:word assign")
+    @ParserRule("classDeclareAssign -> visibility? varType:word assign")
     public static ClassDeclareAssign classDeclareAssign(String varType, Assign assign)
     {
         return new ClassDeclareAssign(varType, assign);
@@ -141,15 +189,32 @@ public class JavaParser
         return method;
     }
 
-    @ParserRule("method -> visibility? returnType:word methodName:word ( declarations? ) { methodExpressions }")
-    public static MethodContainer nonEmptyObject(String visibility, String methodName, String returnType, List<Declare> declarations, List<MethodExpression> methodExpressions)
+    @ParserRule("method -> visibility? returnType:word methodName:word ( declarations? ) inner:block")
+    public static MethodContainer nonEmptyObject(String visibility, String methodName, String returnType, List<Declare> declarations, Block inner)
     {
         if (declarations == null)
         {
             declarations = new ArrayList<>();
         }
 
-        return new MethodContainer(methodName, returnType, declarations, methodExpressions);
+        return new MethodContainer(methodName, returnType, declarations, inner);
+    }
+
+    @ParserRule("methodExpression -> block")
+    public static MethodExpression classExpressions(Block block)
+    {
+        return block;
+    }
+
+    @ParserRule("block -> { methodExpressions? }")
+    public static Block nonEmptyObject(List<MethodExpression> methodExpressions)
+    {
+        if (methodExpressions == null)
+        {
+            methodExpressions = new ArrayList<>();
+        }
+
+        return new Block(methodExpressions);
     }
 
     @ParserRule("declarations -> (declarations ,)? declare")
@@ -221,15 +286,10 @@ public class JavaParser
         return expression;
     }
 
-    @ParserRule("if -> ifKeyword ( statement ) { methodExpressions? }")
-    public static IfExpression statement(Statement statement, List<MethodExpression> methodExpressions)
+    @ParserRule("if -> ifKeyword ( statement ) inner:methodExpression")
+    public static IfExpression statement(Statement statement, MethodExpression inner)
     {
-        if (methodExpressions == null)
-        {
-            methodExpressions = new ArrayList<>();
-        }
-
-        return new IfExpression(statement, methodExpressions);
+        return new IfExpression(statement, inner);
     }
 
     //While
@@ -239,17 +299,11 @@ public class JavaParser
         return expression;
     }
 
-    @ParserRule("while -> whileKeyword ( statement ) { methodExpressions? }")
-    public static WhileExpression whileExpression(Statement statement, List<MethodExpression> methodExpressions)
+    @ParserRule("while -> whileKeyword ( statement ) inner:methodExpression")
+    public static WhileExpression whileExpression(Statement statement, MethodExpression inner)
     {
-        if (methodExpressions == null)
-        {
-            methodExpressions = new ArrayList<>();
-        }
-
-        return new WhileExpression(statement, methodExpressions);
+        return new WhileExpression(statement, inner);
     }
-
 
     //for
     @ParserRule("methodExpression -> expression:for")
@@ -258,15 +312,10 @@ public class JavaParser
         return expression;
     }
 
-    @ParserRule("for -> forKeyword ( init:declareAssign ; condition:statement ; increment:statement ) { methodExpressions? }")
-    public static ForExpression forExpression(DeclareAssign init, Statement condition, Statement increment, List<MethodExpression> methodExpressions)
+    @ParserRule("for -> forKeyword ( init:declareAssign ; condition:statement ; increment:statement ) inner:methodExpression")
+    public static ForExpression forExpression(DeclareAssign init, Statement condition, Statement increment, MethodExpression inner)
     {
-        if (methodExpressions == null)
-        {
-            methodExpressions = new ArrayList<>();
-        }
-
-        return new ForExpression(init, condition, increment, methodExpressions);
+        return new ForExpression(init, condition, increment, inner);
     }
 
     //assign
@@ -436,13 +485,25 @@ public class JavaParser
     @ParserRule("increment -> rawStatement ++")
     public static Statement increment(Statement rawStatement)
     {
-        return new StatementIncrement(rawStatement);
+        return new StatementPostIncrement(rawStatement);
     }
 
     @ParserRule("increment -> rawStatement --")
     public static Statement decrement(Statement rawStatement)
     {
-        return new StatementDecrement(rawStatement);
+        return new StatementPostDecrement(rawStatement);
+    }
+
+    @ParserRule("increment -> ++ rawStatement")
+    public static Statement preIncrement(Statement rawStatement)
+    {
+        return new StatementPreIncrement(rawStatement);
+    }
+
+    @ParserRule("increment -> -- rawStatement")
+    public static Statement preDecrement(Statement rawStatement)
+    {
+        return new StatementPreDecrement(rawStatement);
     }
 
     @ParserRule("increment -> rawStatement")
@@ -458,7 +519,77 @@ public class JavaParser
         return statement;
     }
 
-    @ParserRule("rawStatement -> key:word")
+    @ParserRule("rawStatement -> methodCall")
+    @ParserRule("methodExpression -> methodCall ;")
+    public static MethodCall parenth(MethodCall methodCall)
+    {
+        return methodCall;
+    }
+
+
+    @ParserRule("methodCall -> target:member statementParenthesis")
+    public static MethodCall methodCall(Statement target, List<Statement> statementParenthesis)
+    {
+        return new MethodCall(target, statementParenthesis);
+    }
+
+    @ParserRule("statementParenthesis -> ( statements? )")
+    public static List<Statement> methodCall(List<Statement> statements)
+    {
+        if (statements == null)
+        {
+            statements = new ArrayList<>();
+        }
+
+        return statements;
+    }
+
+    @ParserRule("statements -> (statements ,)? statement")
+    public static List<Statement> methodCall(List<Statement> statements, Statement statement)
+    {
+        if (statements == null)
+        {
+            statements = new ArrayList<>();
+        }
+
+        statements.add(statement);
+
+        return statements;
+    }
+
+
+
+    //@ParserRule("rawStatement -> newCall")
+    @ParserRule("methodExpression -> newCall ;")
+    public static StatementNew dslkds(StatementNew newCall)
+    {
+        return newCall;
+    }
+
+    @ParserRule("newCall -> newKeyword className:member statementParenthesis")
+    public static StatementNew dslkds(Statement className, List<Statement> statementParenthesis)
+    {
+        return new StatementNew(new MethodCall(className, statementParenthesis));
+    }
+
+    @ParserRule("member -> (left:rawStatement .)? right:variable")
+    public static Statement member(Statement left, StatementVariable right)
+    {
+        if (left == null)
+        {
+            return right;
+        }
+
+        return new MemberSelect(left, right);
+    }
+
+    @ParserRule("rawStatement -> member")
+    public static StatementVariable variable(StatementVariable variable)
+    {
+        return variable;
+    }
+
+    @ParserRule("variable -> key:word")
     public static StatementVariable variable(String key)
     {
         return new StatementVariable(key);

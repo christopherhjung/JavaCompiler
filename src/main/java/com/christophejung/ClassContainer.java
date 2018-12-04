@@ -21,6 +21,7 @@ public class ClassContainer
     {
         StringBuilder sb = new StringBuilder();
 
+        sb.append("class ");
         sb.append(className);
         sb.append("{");
 
