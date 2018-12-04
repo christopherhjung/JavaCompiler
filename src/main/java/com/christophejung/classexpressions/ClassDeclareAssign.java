@@ -1,9 +1,8 @@
 package com.christophejung.classexpressions;
 
 import com.christophejung.methodexpressions.Assign;
-import com.christophejung.methodexpressions.MethodExpression;
 
-public class ClassDeclareAssign implements ClassExpression
+public class ClassDeclareAssign implements ClassStatement
 {
     private String varType;
     private Assign value;

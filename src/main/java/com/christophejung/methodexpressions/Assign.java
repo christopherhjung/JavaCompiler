@@ -1,21 +1,21 @@
 package com.christophejung.methodexpressions;
 
-import com.christophejung.statements.Statement;
+import com.christophejung.statements.Expression;
 
-public class Assign implements Statement, MethodExpression
+public class Assign implements Expression, Statement
 {
     private String varName;
-    private Statement statement;
+    private Expression expression;
 
-    public Assign(String varName, Statement statement)
+    public Assign(String varName, Expression expression)
     {
         this.varName = varName;
-        this.statement = statement;
+        this.expression = expression;
     }
 
     @Override
     public String toString()
     {
-        return varName + " = " + statement;
+        return varName + " = " + expression;
     }
 }

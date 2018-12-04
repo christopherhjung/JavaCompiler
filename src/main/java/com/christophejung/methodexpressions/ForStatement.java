@@ -1,15 +1,15 @@
 package com.christophejung.methodexpressions;
 
-import com.christophejung.statements.Statement;
+import com.christophejung.statements.Expression;
 
-public class ForExpression implements MethodExpression
+public class ForStatement implements Statement
 {
-    private Statement condition;
-    private MethodExpression expression;
-    private MethodExpression init;
-    private Statement increment;
+    private Expression condition;
+    private Statement expression;
+    private Statement init;
+    private Expression increment;
 
-    public ForExpression(MethodExpression init, Statement condition, Statement increment, MethodExpression expression)
+    public ForStatement(Statement init, Expression condition, Expression increment, Statement expression)
     {
         this.init = init;
         this.condition = condition;

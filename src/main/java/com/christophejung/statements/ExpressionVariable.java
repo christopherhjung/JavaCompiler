@@ -1,10 +1,10 @@
 package com.christophejung.statements;
 
-public class StatementVariable implements Statement
+public class ExpressionVariable implements Expression
 {
     private String name;
 
-    public StatementVariable(String name)
+    public ExpressionVariable(String name)
     {
         this.name = name;
     }

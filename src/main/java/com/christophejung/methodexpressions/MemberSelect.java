@@ -1,19 +1,16 @@
 package com.christophejung.methodexpressions;
 
-import com.christophejung.statements.Statement;
-import com.christophejung.statements.StatementVariable;
-import com.christopherjung.regex.State;
+import com.christophejung.statements.Expression;
+import com.christophejung.statements.ExpressionVariable;
 
-import java.util.List;
-
-public class MemberSelect implements MethodExpression, Statement
+public class MemberSelect implements Statement, Expression
 {
-    private Statement statement;
-    private StatementVariable methodCall;
+    private Expression expression;
+    private Expression methodCall;
 
-    public MemberSelect(Statement statement, StatementVariable methodCall)
+    public MemberSelect(Expression expression, Expression methodCall)
     {
-        this.statement = statement;
+        this.expression = expression;
         this.methodCall = methodCall;
     }
 
@@ -22,7 +19,7 @@ public class MemberSelect implements MethodExpression, Statement
     {
         StringBuilder sb = new StringBuilder();
 
-        sb.append(statement);
+        sb.append(expression);
         sb.append(".");
         sb.append(methodCall);
 

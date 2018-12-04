@@ -1,14 +1,14 @@
 package com.christophejung;
 
-import com.christophejung.methodexpressions.MethodExpression;
+import com.christophejung.methodexpressions.Statement;
 
 import java.util.List;
 
-public class Block implements MethodExpression
+public class Block implements Statement
 {
-    private List<MethodExpression> classExpressions;
+    private List<Statement> classExpressions;
 
-    public Block(List<MethodExpression> classExpressions)
+    public Block(List<Statement> classExpressions)
     {
         this.classExpressions = classExpressions;
     }
@@ -20,7 +20,7 @@ public class Block implements MethodExpression
 
         sb.append("{");
 
-        for (MethodExpression expression : classExpressions)
+        for (Statement expression : classExpressions)
         {
             sb.append(expression);
             sb.append(';');

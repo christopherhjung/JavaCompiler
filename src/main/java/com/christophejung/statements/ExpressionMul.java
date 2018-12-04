@@ -1,11 +1,11 @@
 package com.christophejung.statements;
 
-public class StatementMul implements Statement
+public class ExpressionMul implements Expression
 {
-    private Statement left;
-    private Statement right;
+    private Expression left;
+    private Expression right;
 
-    public StatementMul(Statement left, Statement right)
+    public ExpressionMul(Expression left, Expression right)
     {
         this.left = left;
         this.right = right;

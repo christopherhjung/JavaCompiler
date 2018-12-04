@@ -1,7 +1,7 @@
 package com.christophejung;
 
 import com.christophejung.classexpressions.ClassDeclareAssign;
-import com.christophejung.classexpressions.ClassExpression;
+import com.christophejung.classexpressions.ClassStatement;
 import com.christophejung.classexpressions.MethodContainer;
 import com.christophejung.methodexpressions.*;
 import com.christophejung.statements.*;
@@ -144,35 +144,33 @@ public class JavaParser
     public static String word = "[a-zA-Z]\\w*";
 
 
-
-
     @ParserRoot("clazz:class EOF")
     public static ClassContainer start(ClassContainer clazz)
     {
         return clazz;
     }
 
-    @ParserRule("class -> visibility? classKeyword className:word { classExpressions }")
-    public static ClassContainer classValue(String visibility, String className, List<ClassExpression> classExpressions)
+    @ParserRule("class -> visibility? classKeyword className:word { classStatements }")
+    public static ClassContainer classValue(String visibility, String className, List<ClassStatement> classStatements)
     {
-        return new ClassContainer(className, classExpressions);
+        return new ClassContainer(className, classStatements);
     }
 
-    @ParserRule("classExpressions -> classExpressions? classExpression")
-    public static List<ClassExpression> classExpressions(List<ClassExpression> classExpressions, ClassExpression classExpression)
+    @ParserRule("classStatements -> classStatements? classStatement")
+    public static List<ClassStatement> classStatements(List<ClassStatement> classStatements, ClassStatement classStatement)
     {
-        if (classExpressions == null)
+        if (classStatements == null)
         {
-            classExpressions = new ArrayList<>();
+            classStatements = new ArrayList<>();
         }
 
-        classExpressions.add(classExpression);
+        classStatements.add(classStatement);
 
-        return classExpressions;
+        return classStatements;
     }
 
-    @ParserRule("classExpression -> classDeclareAssign ;")
-    public static ClassExpression classExpressions(ClassDeclareAssign classDeclareAssign)
+    @ParserRule("classStatement -> classDeclareAssign ;")
+    public static ClassStatement classStatements(ClassDeclareAssign classDeclareAssign)
     {
         return classDeclareAssign;
     }
@@ -183,8 +181,8 @@ public class JavaParser
         return new ClassDeclareAssign(varType, assign);
     }
 
-    @ParserRule("classExpression -> method")
-    public static ClassExpression classExpressions(MethodContainer method)
+    @ParserRule("classStatement -> method")
+    public static ClassStatement classStatements(MethodContainer method)
     {
         return method;
     }
@@ -200,21 +198,21 @@ public class JavaParser
         return new MethodContainer(methodName, returnType, declarations, inner);
     }
 
-    @ParserRule("methodExpression -> block")
-    public static MethodExpression classExpressions(Block block)
+    @ParserRule("methodStatement -> block")
+    public static Statement classStatements(Block block)
     {
         return block;
     }
 
-    @ParserRule("block -> { methodExpressions? }")
-    public static Block nonEmptyObject(List<MethodExpression> methodExpressions)
+    @ParserRule("block -> { methodStatements? }")
+    public static Block nonEmptyObject(List<Statement> methodStatements)
     {
-        if (methodExpressions == null)
+        if (methodStatements == null)
         {
-            methodExpressions = new ArrayList<>();
+            methodStatements = new ArrayList<>();
         }
 
-        return new Block(methodExpressions);
+        return new Block(methodStatements);
     }
 
     @ParserRule("declarations -> (declarations ,)? declare")
@@ -230,20 +228,20 @@ public class JavaParser
         return declarations;
     }
 
-    @ParserRule("methodExpressions -> methodExpressions? methodExpression")
-    public static List<MethodExpression> methodStatments(MethodExpression methodExpression, List<MethodExpression> methodExpressions)
+    @ParserRule("methodStatements -> methodStatements? methodStatement")
+    public static List<Statement> methodStatments(Statement methodStatement, List<Statement> methodStatements)
     {
-        if (methodExpressions == null)
+        if (methodStatements == null)
         {
-            methodExpressions = new ArrayList<>();
+            methodStatements = new ArrayList<>();
         }
 
-        methodExpressions.add(methodExpression);
+        methodStatements.add(methodStatement);
 
-        return methodExpressions;
+        return methodStatements;
     }
 
-    @ParserRule("methodExpression -> declareAssign ;")
+    @ParserRule("methodStatement -> declareAssign ;")
     public static DeclareAssign varDefAssign(DeclareAssign declareAssign)
     {
         return declareAssign;
@@ -255,7 +253,7 @@ public class JavaParser
         return new DeclareAssign(varType, assign);
     }
 
-    @ParserRule("methodExpression -> declare ;")
+    @ParserRule("methodStatement -> declare ;")
     public static Declare declare(Declare declare)
     {
         return declare;
@@ -267,343 +265,345 @@ public class JavaParser
         return new Declare(varType, varName);
     }
 
-    @ParserRule("methodExpression -> assign ;")
+    @ParserRule("methodStatement -> assign ;")
     public static Assign assign(Assign assign)
     {
         return assign;
     }
 
-    @ParserRule("statement -> assignStatement")
-    public static Statement statement(Statement assignStatement)
+    @ParserRule("expression -> assignExpression")
+    public static Expression expression(Expression assignExpression)
     {
-        return assignStatement;
+        return assignExpression;
     }
 
     //if
-    @ParserRule("methodExpression -> expression:if")
-    public static MethodExpression assign(IfExpression expression)
+    @ParserRule("methodStatement -> statement:if")
+    public static Statement assign(IfStatement statement)
     {
-        return expression;
+        return statement;
     }
 
-    @ParserRule("if -> ifKeyword ( statement ) inner:methodExpression")
-    public static IfExpression statement(Statement statement, MethodExpression inner)
+    @ParserRule("if -> ifKeyword ( expression ) inner:methodStatement")
+    public static IfStatement expression(Expression expression, Statement inner)
     {
-        return new IfExpression(statement, inner);
+        return new IfStatement(expression, inner);
     }
 
     //While
-    @ParserRule("methodExpression -> expression:while")
-    public static MethodExpression whileExpression(WhileExpression expression)
+    @ParserRule("methodStatement -> statement:while")
+    public static Statement whileStatement(WhileStatement statement)
     {
-        return expression;
+        return statement;
     }
 
-    @ParserRule("while -> whileKeyword ( statement ) inner:methodExpression")
-    public static WhileExpression whileExpression(Statement statement, MethodExpression inner)
+    @ParserRule("while -> whileKeyword ( expression ) inner:methodStatement")
+    public static WhileStatement whileStatement(Expression expression, Statement inner)
     {
-        return new WhileExpression(statement, inner);
+        return new WhileStatement(expression, inner);
     }
 
     //for
-    @ParserRule("methodExpression -> expression:for")
-    public static MethodExpression forExpression(ForExpression expression)
+    @ParserRule("methodStatement -> statement:for")
+    public static Statement forStatement(ForStatement statement)
     {
-        return expression;
+        return statement;
     }
 
-    @ParserRule("for -> forKeyword ( init:declareAssign ; condition:statement ; increment:statement ) inner:methodExpression")
-    public static ForExpression forExpression(DeclareAssign init, Statement condition, Statement increment, MethodExpression inner)
+    @ParserRule("for -> forKeyword ( init:declareAssign ; condition:expression ; increment:expression ) inner:methodStatement")
+    public static ForStatement forStatement(DeclareAssign init, Expression condition, Expression increment, Statement inner)
     {
-        return new ForExpression(init, condition, increment, inner);
+        return new ForStatement(init, condition, increment, inner);
     }
 
     //assign
-    @ParserRule("assign -> varName:word = assignStatement")
-    public static Assign assignStatement(String varName, Statement assignStatement)
+    @ParserRule("assign -> varName:word = assignExpression")
+    public static Assign assignExpression(String varName, Expression assignExpression)
     {
-        return new Assign(varName, assignStatement);
+        return new Assign(varName, assignExpression);
     }
 
-    @ParserRule("assignStatement -> assign")
-    public static Statement assignStatee(Statement assign)
+    @ParserRule("assignExpression -> assign")
+    public static Expression assignStatee(Expression assign)
     {
         return assign;
     }
 
-    @ParserRule("assignStatement -> boolComp")
-    public static Statement assign(Statement boolComp)
+    @ParserRule("assignExpression -> boolComp")
+    public static Expression assign(Expression boolComp)
     {
         return boolComp;
     }
 
     //boolean
     @ParserRule("boolComp -> boolComp && equals")
-    public static Statement booleanAnd(Statement boolComp, Statement equals)
+    public static Expression booleanAnd(Expression boolComp, Expression equals)
     {
-        return new StatementBooleanAnd(boolComp, equals);
+        return new ExpressionBooleanAnd(boolComp, equals);
     }
 
     @ParserRule("boolComp -> boolComp & equals")
-    public static Statement bitwiseAnd(Statement boolComp, Statement equals)
+    public static Expression bitwiseAnd(Expression boolComp, Expression equals)
     {
-        return new StatementBitwiseAnd(boolComp, equals);
+        return new ExpressionBitwiseAnd(boolComp, equals);
     }
 
     @ParserRule("boolComp -> boolComp || equals")
-    public static Statement booleanOr(Statement boolComp, Statement equals)
+    public static Expression booleanOr(Expression boolComp, Expression equals)
     {
-        return new StatementBooleanOr(boolComp, equals);
+        return new ExpressionBooleanOr(boolComp, equals);
     }
 
     @ParserRule("boolComp -> boolComp | equals")
-    public static Statement bitwiseOr(Statement boolComp, Statement equals)
+    public static Expression bitwiseOr(Expression boolComp, Expression equals)
     {
-        return new StatementBitwiseOr(boolComp, equals);
+        return new ExpressionBitwiseOr(boolComp, equals);
     }
 
     @ParserRule("boolComp -> equals")
-    public static Statement boolComp(Statement equals)
+    public static Expression boolComp(Expression equals)
     {
         return equals;
     }
 
     //equals
     @ParserRule("equals -> equals == comp")
-    public static Statement equals(Statement equals, Statement comp)
+    public static Expression equals(Expression equals, Expression comp)
     {
-        return new StatementEquals(equals, comp);
+        return new ExpressionEquals(equals, comp);
     }
 
     @ParserRule("equals -> equals != comp")
-    public static Statement notEquals(Statement equals, Statement comp)
+    public static Expression notEquals(Expression equals, Expression comp)
     {
-        return new StatementNotEquals(equals, comp);
+        return new ExpressionNotEquals(equals, comp);
     }
 
     @ParserRule("equals -> comp")
-    public static Statement greater(Statement comp)
+    public static Expression greater(Expression comp)
     {
         return comp;
     }
 
     //compares
     @ParserRule("comp -> comp < shift")
-    public static Statement smaller(Statement comp, Statement shift)
+    public static Expression smaller(Expression comp, Expression shift)
     {
-        return new StatementSmaller(comp, shift);
+        return new ExpressionSmaller(comp, shift);
     }
 
     @ParserRule("comp -> comp <= shift")
-    public static Statement smallerEquals(Statement comp, Statement shift)
+    public static Expression smallerEquals(Expression comp, Expression shift)
     {
-        return new StatementSmallerEquals(comp, shift);
+        return new ExpressionSmallerEquals(comp, shift);
     }
 
     @ParserRule("comp -> comp >= shift")
-    public static Statement greaterEquals(Statement comp, Statement shift)
+    public static Expression greaterEquals(Expression comp, Expression shift)
     {
-        return new StatementGreaterEquals(comp, shift);
+        return new ExpressionGreaterEquals(comp, shift);
     }
 
     @ParserRule("comp -> comp > shift")
-    public static Statement greater(Statement comp, Statement shift)
+    public static Expression greater(Expression comp, Expression shift)
     {
-        return new StatementGreaterEquals(comp, shift);
+        return new ExpressionGreaterEquals(comp, shift);
     }
 
     @ParserRule("comp -> shift")
-    public static Statement comp(Statement shift)
+    public static Expression comp(Expression shift)
     {
         return shift;
     }
 
     //shift
     @ParserRule("shift -> shift >> add")
-    public static Statement shiftRight(Statement shift, Statement add)
+    public static Expression shiftRight(Expression shift, Expression add)
     {
-        return new StatementShiftRight(shift, add);
+        return new ExpressionShiftRight(shift, add);
     }
 
     @ParserRule("shift -> shift << add")
-    public static Statement shiftLeft(Statement shift, Statement add)
+    public static Expression shiftLeft(Expression shift, Expression add)
     {
-        return new StatementShiftLeft(shift, add);
+        return new ExpressionShiftLeft(shift, add);
     }
 
     @ParserRule("shift -> add")
-    public static Statement shift(Statement add)
+    public static Expression shift(Expression add)
     {
         return add;
     }
 
     //additions
     @ParserRule("add -> add + mul")
-    public static Statement add(Statement add, Statement mul)
+    public static Expression add(Expression add, Expression mul)
     {
-        return new StatementAdd(add, mul);
+        return new ExpressionAdd(add, mul);
     }
 
     @ParserRule("add -> add - mul")
-    public static Statement sub(Statement add, Statement mul)
+    public static Expression sub(Expression add, Expression mul)
     {
-        return new StatementSub(add, mul);
+        return new ExpressionSub(add, mul);
     }
 
     @ParserRule("add -> mul")
-    public static Statement add(Statement mul)
+    public static Expression add(Expression mul)
     {
         return mul;
     }
 
     //multiplication
-    @ParserRule("mul -> mul * increment")
-    public static StatementMul mul(Statement mul, Statement increment)
+    @ParserRule("mul -> mul * cast")
+    public static ExpressionMul mul(Expression mul, Expression cast)
     {
-        return new StatementMul(mul, increment);
+        return new ExpressionMul(mul, cast);
     }
 
-    @ParserRule("mul -> mul % increment")
-    public static StatementModulo modulo(Statement mul, Statement increment)
+    @ParserRule("mul -> mul % cast")
+    public static ExpressionModulo modulo(Expression mul, Expression cast)
     {
-        return new StatementModulo(mul, increment);
+        return new ExpressionModulo(mul, cast);
     }
 
-    @ParserRule("mul -> mul / increment")
-    public static StatementMul div(Statement mul, Statement increment)
+    @ParserRule("mul -> mul / cast")
+    public static ExpressionMul div(Expression mul, Expression cast)
     {
-        return new StatementMul(mul, increment);
+        return new ExpressionMul(mul, cast);
     }
 
-    @ParserRule("mul -> increment")
-    public static Statement mul(Statement increment)
+    @ParserRule("mul -> cast")
+    public static Expression mul(Expression cast)
+    {
+        return cast;
+    }
+
+    //cast and new
+
+
+    @ParserRule("cast -> ( type:word ) increment")
+    public static Expression cast(String type, Expression increment)
+    {
+        return new ExpressionCast(type, increment);
+    }
+
+    @ParserRule("increment -> newKeyword member")
+    public static ExpressionNew dslkds(Expression member)
+    {
+        return new ExpressionNew(member);
+    }
+
+    @ParserRule("cast -> increment")
+    public static Expression cast(Expression increment)
     {
         return increment;
     }
 
     //increment
-    @ParserRule("increment -> rawStatement ++")
-    public static Statement increment(Statement rawStatement)
+    @ParserRule("increment -> member ++")
+    public static Expression increment(Expression member)
     {
-        return new StatementPostIncrement(rawStatement);
+        return new ExpressionPostIncrement(member);
     }
 
-    @ParserRule("increment -> rawStatement --")
-    public static Statement decrement(Statement rawStatement)
+    @ParserRule("increment -> member --")
+    public static Expression decrement(Expression member)
     {
-        return new StatementPostDecrement(rawStatement);
+        return new ExpressionPostDecrement(member);
     }
 
-    @ParserRule("increment -> ++ rawStatement")
-    public static Statement preIncrement(Statement rawStatement)
+    @ParserRule("increment -> ++ member")
+    public static Expression preIncrement(Expression member)
     {
-        return new StatementPreIncrement(rawStatement);
+        return new ExpressionPreIncrement(member);
     }
 
-    @ParserRule("increment -> -- rawStatement")
-    public static Statement preDecrement(Statement rawStatement)
+    @ParserRule("increment -> -- member")
+    public static Expression preDecrement(Expression member)
     {
-        return new StatementPreDecrement(rawStatement);
+        return new ExpressionPreDecrement(member);
     }
 
-    @ParserRule("increment -> rawStatement")
-    public static Statement incrementLoop(Statement rawStatement)
+    @ParserRule("increment -> member")
+    public static Expression incrementLoop(Expression member)
     {
-        return rawStatement;
+        return member;
     }
 
-    //parenthesis
-    @ParserRule("rawStatement -> ( statement )")
-    public static Statement parenth(Statement statement)
+    //member assozi
+
+    @ParserRule("member -> member . methodCall")
+    public static Expression member(Expression member, Expression methodCall)
     {
-        return statement;
+        return new MemberSelect(member, methodCall);
     }
 
-    @ParserRule("rawStatement -> methodCall")
-    @ParserRule("methodExpression -> methodCall ;")
-    public static MethodCall parenth(MethodCall methodCall)
+    @ParserRule("member -> ( expression )")
+    public static Expression parenth(Expression expression)
+    {
+        return expression;
+    }
+
+    @ParserRule("member -> methodCall")
+    public static Expression member(Expression methodCall)
     {
         return methodCall;
     }
 
 
-    @ParserRule("methodCall -> target:member statementParenthesis")
-    public static MethodCall methodCall(Statement target, List<Statement> statementParenthesis)
+    //methodCall
+    @ParserRule("methodCall -> rawExpression expressionParenthesis")
+    public static MethodCall methodCall(Expression rawExpression, List<Expression> expressionParenthesis)
     {
-        return new MethodCall(target, statementParenthesis);
+        return new MethodCall(rawExpression, expressionParenthesis);
     }
 
-    @ParserRule("statementParenthesis -> ( statements? )")
-    public static List<Statement> methodCall(List<Statement> statements)
+    @ParserRule("methodCall -> rawExpression")
+    public static Expression methodCall(Expression rawExpression)
     {
-        if (statements == null)
+        return rawExpression;
+    }
+
+    @ParserRule("expressionParenthesis -> ( expressions? )")
+    public static List<Expression> methodCall(List<Expression> expressions)
+    {
+        if (expressions == null)
         {
-            statements = new ArrayList<>();
+            expressions = new ArrayList<>();
         }
 
-        return statements;
+        return expressions;
     }
 
-    @ParserRule("statements -> (statements ,)? statement")
-    public static List<Statement> methodCall(List<Statement> statements, Statement statement)
+    @ParserRule("expressions -> (expressions ,)? expression")
+    public static List<Expression> methodCall(List<Expression> expressions, Expression expression)
     {
-        if (statements == null)
+        if (expressions == null)
         {
-            statements = new ArrayList<>();
+            expressions = new ArrayList<>();
         }
 
-        statements.add(statement);
+        expressions.add(expression);
 
-        return statements;
+        return expressions;
     }
 
-
-
-    //@ParserRule("rawStatement -> newCall")
-    @ParserRule("methodExpression -> newCall ;")
-    public static StatementNew dslkds(StatementNew newCall)
+    @ParserRule("rawExpression -> key:word")
+    public static ExpressionVariable variable(String key)
     {
-        return newCall;
+        return new ExpressionVariable(key);
     }
 
-    @ParserRule("newCall -> newKeyword className:member statementParenthesis")
-    public static StatementNew dslkds(Statement className, List<Statement> statementParenthesis)
+    @ParserRule("rawExpression -> key:number")
+    public static ExpressionDouble testing(String key)
     {
-        return new StatementNew(new MethodCall(className, statementParenthesis));
+        return new ExpressionDouble(Double.parseDouble(key));
     }
 
-    @ParserRule("member -> (left:rawStatement .)? right:variable")
-    public static Statement member(Statement left, StatementVariable right)
+    @ParserRule("rawExpression -> key:string")
+    public static ExpressionString string(String key)
     {
-        if (left == null)
-        {
-            return right;
-        }
-
-        return new MemberSelect(left, right);
-    }
-
-    @ParserRule("rawStatement -> member")
-    public static StatementVariable variable(StatementVariable variable)
-    {
-        return variable;
-    }
-
-    @ParserRule("variable -> key:word")
-    public static StatementVariable variable(String key)
-    {
-        return new StatementVariable(key);
-    }
-
-    @ParserRule("rawStatement -> key:number")
-    public static StatementDouble testing(String key)
-    {
-        return new StatementDouble(Double.parseDouble(key));
-    }
-
-    @ParserRule("rawStatement -> key:string")
-    public static StatementString string(String key)
-    {
-        return new StatementString(key.substring(1, key.length() - 1));
+        return new ExpressionString(key.substring(1, key.length() - 1));
     }
 }

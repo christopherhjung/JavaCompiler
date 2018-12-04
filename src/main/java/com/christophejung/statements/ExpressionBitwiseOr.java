@@ -1,11 +1,11 @@
 package com.christophejung.statements;
 
-public class StatementBitwiseOr implements Statement
+public class ExpressionBitwiseOr implements Expression
 {
-    private Statement left;
-    private Statement right;
+    private Expression left;
+    private Expression right;
 
-    public StatementBitwiseOr(Statement left, Statement right)
+    public ExpressionBitwiseOr(Expression left, Expression right)
     {
         this.left = left;
         this.right = right;

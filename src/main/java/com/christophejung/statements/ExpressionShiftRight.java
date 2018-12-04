@@ -1,11 +1,11 @@
 package com.christophejung.statements;
 
-public class StatementShiftRight implements Statement
+public class ExpressionShiftRight implements Expression
 {
-    private Statement left;
-    private Statement right;
+    private Expression left;
+    private Expression right;
 
-    public StatementShiftRight(Statement left, Statement right)
+    public ExpressionShiftRight(Expression left, Expression right)
     {
         this.left = left;
         this.right = right;

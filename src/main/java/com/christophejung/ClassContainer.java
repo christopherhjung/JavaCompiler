@@ -1,18 +1,18 @@
 package com.christophejung;
 
-import com.christophejung.classexpressions.ClassExpression;
+import com.christophejung.classexpressions.ClassStatement;
 
 import java.util.List;
 
 public class ClassContainer
 {
     private String className;
-    private List<ClassExpression> classExpressions;
+    private List<ClassStatement> classStatements;
 
-    public ClassContainer(String className, List<ClassExpression> classExpressions)
+    public ClassContainer(String className, List<ClassStatement> classStatements)
     {
         this.className = className;
-        this.classExpressions = classExpressions;
+        this.classStatements = classStatements;
     }
 
 
@@ -25,7 +25,7 @@ public class ClassContainer
         sb.append(className);
         sb.append("{");
 
-        for (ClassExpression expression : classExpressions)
+        for (ClassStatement expression : classStatements)
         {
             sb.append(expression);
             sb.append(';');

@@ -1,6 +1,6 @@
 package com.christophejung.statements;
 
-public interface Statement
+public interface Expression
 {
 
 }

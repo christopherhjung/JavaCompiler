@@ -1,11 +1,11 @@
 package com.christophejung.statements;
 
-public class StatementEquals implements Statement
+public class ExpressionEquals implements Expression
 {
-    private Statement left;
-    private Statement right;
+    private Expression left;
+    private Expression right;
 
-    public StatementEquals(Statement left, Statement right)
+    public ExpressionEquals(Expression left, Expression right)
     {
         this.left = left;
         this.right = right;

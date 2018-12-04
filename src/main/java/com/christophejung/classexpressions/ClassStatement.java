@@ -1,5 +1,5 @@
 package com.christophejung.classexpressions;
 
-public interface ClassExpression
+public interface ClassStatement
 {
 }

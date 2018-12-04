@@ -1,18 +1,18 @@
 package com.christophejung.methodexpressions;
 
-import com.christophejung.statements.Statement;
+import com.christophejung.statements.Expression;
 
 import java.util.List;
 
-public class MethodCall implements MethodExpression, Statement
+public class MethodCall implements Statement, Expression
 {
-    private Statement target;
-    private List<Statement> statements;
+    private Expression target;
+    private List<Expression> expressions;
 
-    public MethodCall(Statement target, List<Statement> statements)
+    public MethodCall(Expression target, List<Expression> expressions)
     {
         this.target = target;
-        this.statements = statements;
+        this.expressions = expressions;
     }
 
     @Override
@@ -24,13 +24,13 @@ public class MethodCall implements MethodExpression, Statement
         sb.append("(");
 
         boolean first = false;
-        for (Statement statement : statements)
+        for (Expression expression : expressions)
         {
             if (first)
             {
                 sb.append(", ");
             }
-            sb.append(statement);
+            sb.append(expression);
             first = true;
         }
 

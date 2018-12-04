@@ -1,13 +1,13 @@
 package com.christophejung.methodexpressions;
 
-import com.christophejung.statements.Statement;
+import com.christophejung.statements.Expression;
 
-public class IfExpression implements MethodExpression
+public class WhileStatement implements Statement
 {
-    private Statement condition;
-    private MethodExpression expression;
+    private Expression condition;
+    private Statement expression;
 
-    public IfExpression(Statement condition, MethodExpression expression)
+    public WhileStatement(Expression condition, Statement expression)
     {
         this.condition = condition;
         this.expression = expression;
@@ -18,7 +18,7 @@ public class IfExpression implements MethodExpression
     {
         StringBuilder sb = new StringBuilder();
 
-        sb.append("if(");
+        sb.append("while(");
         sb.append(condition);
         sb.append(")");
 

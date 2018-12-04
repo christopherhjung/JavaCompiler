@@ -4,6 +4,11 @@ class Text
 
     void test(int e, String key)
     {
-        int sooo = test.lol(2,3);
+
+        String a = new String(3 + 4);
+
+
+
+        int a = 3 + 4 - (2+ 3).test.lol("halo");
     }
 }

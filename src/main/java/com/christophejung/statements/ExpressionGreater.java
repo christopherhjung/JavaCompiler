@@ -1,11 +1,11 @@
 package com.christophejung.statements;
 
-public class StatementGreater implements Statement
+public class ExpressionGreater implements Expression
 {
-    private Statement left;
-    private Statement right;
+    private Expression left;
+    private Expression right;
 
-    public StatementGreater(Statement left, Statement right)
+    public ExpressionGreater(Expression left, Expression right)
     {
         this.left = left;
         this.right = right;

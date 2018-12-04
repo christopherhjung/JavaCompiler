@@ -1,8 +1,6 @@
 package com.christophejung.classexpressions;
 
-import com.christophejung.methodexpressions.MethodExpression;
-
-public class ClassDeclare implements ClassExpression
+public class ClassDeclare implements ClassStatement
 {
     private String varType;
     private String varName;

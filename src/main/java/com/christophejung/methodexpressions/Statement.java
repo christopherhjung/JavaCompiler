@@ -1,6 +1,6 @@
 package com.christophejung.methodexpressions;
 
-public interface MethodExpression
+public interface Statement
 {
 
 }

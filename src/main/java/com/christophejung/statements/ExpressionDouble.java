@@ -1,10 +1,10 @@
 package com.christophejung.statements;
 
-public class StatementDouble implements Statement
+public class ExpressionDouble implements Expression
 {
     private double value;
 
-    public StatementDouble(double value)
+    public ExpressionDouble(double value)
     {
         this.value = value;
     }

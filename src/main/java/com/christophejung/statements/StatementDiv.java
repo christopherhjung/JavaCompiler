@@ -2,10 +2,10 @@ package com.christophejung.statements;
 
 public class StatementDiv
 {
-    private Statement left;
-    private Statement right;
+    private Expression left;
+    private Expression right;
 
-    public StatementDiv(Statement left, Statement right)
+    public StatementDiv(Expression left, Expression right)
     {
         this.left = left;
         this.right = right;

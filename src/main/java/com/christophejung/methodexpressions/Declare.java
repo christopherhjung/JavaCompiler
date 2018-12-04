@@ -1,6 +1,6 @@
 package com.christophejung.methodexpressions;
 
-public class Declare implements MethodExpression
+public class Declare implements Statement
 {
     private String varType;
     private String varName;

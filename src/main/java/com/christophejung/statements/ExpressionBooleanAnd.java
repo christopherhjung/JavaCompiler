@@ -1,11 +1,11 @@
 package com.christophejung.statements;
 
-public class StatementBooleanAnd implements Statement
+public class ExpressionBooleanAnd implements Expression
 {
-    private Statement left;
-    private Statement right;
+    private Expression left;
+    private Expression right;
 
-    public StatementBooleanAnd(Statement left, Statement right)
+    public ExpressionBooleanAnd(Expression left, Expression right)
     {
         this.left = left;
         this.right = right;

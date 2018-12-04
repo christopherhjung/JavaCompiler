@@ -2,11 +2,10 @@ package com.christophejung.classexpressions;
 
 import com.christophejung.Block;
 import com.christophejung.methodexpressions.Declare;
-import com.christophejung.methodexpressions.MethodExpression;
 
 import java.util.List;
 
-public class MethodContainer implements ClassExpression
+public class MethodContainer implements ClassStatement
 {
     private String methodName;
     private String returnType;

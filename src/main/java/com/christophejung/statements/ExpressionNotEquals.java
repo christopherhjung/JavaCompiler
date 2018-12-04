@@ -1,11 +1,11 @@
 package com.christophejung.statements;
 
-public class StatementNotEquals implements Statement
+public class ExpressionNotEquals implements Expression
 {
-    private Statement left;
-    private Statement right;
+    private Expression left;
+    private Expression right;
 
-    public StatementNotEquals(Statement left, Statement right)
+    public ExpressionNotEquals(Expression left, Expression right)
     {
         this.left = left;
         this.right = right;

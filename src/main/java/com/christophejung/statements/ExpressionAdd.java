@@ -1,11 +1,11 @@
 package com.christophejung.statements;
 
-public class StatementAdd implements Statement
+public class ExpressionAdd implements Expression
 {
-    private Statement left;
-    private Statement right;
+    private Expression left;
+    private Expression right;
 
-    public StatementAdd(Statement left, Statement right)
+    public ExpressionAdd(Expression left, Expression right)
     {
         this.left = left;
         this.right = right;

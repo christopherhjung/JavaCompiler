@@ -1,11 +1,11 @@
 package com.christophejung.statements;
 
-public class StatementBooleanOr implements Statement
+public class ExpressionBooleanOr implements Expression
 {
-    private Statement left;
-    private Statement right;
+    private Expression left;
+    private Expression right;
 
-    public StatementBooleanOr(Statement left, Statement right)
+    public ExpressionBooleanOr(Expression left, Expression right)
     {
         this.left = left;
         this.right = right;

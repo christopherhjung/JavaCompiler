@@ -1,8 +1,6 @@
 package com.christophejung.methodexpressions;
 
-import com.christophejung.statements.Statement;
-
-public class DeclareAssign implements MethodExpression
+public class DeclareAssign implements Statement
 {
     private String varType;
     private Assign value;
