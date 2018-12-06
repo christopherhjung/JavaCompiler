@@ -34,7 +34,22 @@ public class Main
             e.printStackTrace();
         }
 
-        System.out.println(o);
+        if (o instanceof Program)
+        {
+            Program program = (Program) o;
+
+            HierarchicalWriter writer = new HierarchicalWriter();
+
+            program.write(writer);
+
+            System.out.println(writer.toString());
+
+        }
+        else
+        {
+            System.out.println(o);
+        }
+
 
     }
 }

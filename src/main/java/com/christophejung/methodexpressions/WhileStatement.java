@@ -1,8 +1,10 @@
 package com.christophejung.methodexpressions;
 
+import com.christophejung.HierarchicalWriter;
+import com.christophejung.Program;
 import com.christophejung.statements.Expression;
 
-public class WhileStatement implements Statement
+public class WhileStatement extends Program implements Statement
 {
     private Expression condition;
     private Statement expression;
@@ -14,15 +16,12 @@ public class WhileStatement implements Statement
     }
 
     @Override
-    public String toString()
+    public void write(HierarchicalWriter writer)
     {
-        StringBuilder sb = new StringBuilder();
+        writer.print("while(");
+        writer.print(condition);
+        writer.print(")");
 
-        sb.append("while(");
-        sb.append(condition);
-        sb.append(")");
-
-        sb.append(expression);
-        return sb.toString();
+        writer.print(expression);
     }
 }

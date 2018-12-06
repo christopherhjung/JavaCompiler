@@ -1,11 +1,13 @@
 package com.christophejung.classexpressions;
 
 import com.christophejung.Block;
+import com.christophejung.HierarchicalWriter;
+import com.christophejung.Program;
 import com.christophejung.methodexpressions.Declare;
 
 import java.util.List;
 
-public class MethodContainer implements ClassStatement
+public class MethodContainer extends Program implements ClassStatement
 {
     private String methodName;
     private String returnType;
@@ -21,30 +23,25 @@ public class MethodContainer implements ClassStatement
     }
 
     @Override
-    public String toString()
+    public void write(HierarchicalWriter writer)
     {
-        StringBuilder sb = new StringBuilder();
-
-        sb.append(returnType);
-        sb.append(' ');
-        sb.append(methodName);
-        sb.append("(");
+        writer.print(returnType);
+        writer.print(' ');
+        writer.print(methodName);
+        writer.print("(");
 
         boolean firstArgument = false;
         for (Declare declare : declarations)
         {
             if (firstArgument)
             {
-                sb.append(", ");
+                writer.print(", ");
             }
-            sb.append(declare);
+            writer.print(declare);
             firstArgument = true;
         }
 
-        sb.append(")");
-
-        sb.append(expression);
-
-        return sb.toString();
+        writer.print(")");
+        writer.print(expression);
     }
 }

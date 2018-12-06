@@ -1,6 +1,9 @@
 package com.christophejung.statements;
 
-public class ExpressionVariable implements Expression
+import com.christophejung.HierarchicalWriter;
+import com.christophejung.Program;
+
+public class ExpressionVariable extends Program implements Expression
 {
     private String name;
 
@@ -10,8 +13,8 @@ public class ExpressionVariable implements Expression
     }
 
     @Override
-    public String toString()
+    public void write(HierarchicalWriter writer)
     {
-        return name;
+        writer.print(name);
     }
 }

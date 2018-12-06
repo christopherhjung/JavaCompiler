@@ -4,36 +4,59 @@ import com.christophejung.classexpressions.ClassStatement;
 
 import java.util.List;
 
-public class ClassContainer
+public class ClassContainer extends Program
 {
     private String className;
     private List<ClassStatement> classStatements;
+    private String superclass;
+    private List<String> interfaces;
 
-    public ClassContainer(String className, List<ClassStatement> classStatements)
+    public ClassContainer(String className, String superclass, List<String> interfaces, List<ClassStatement> classStatements)
     {
         this.className = className;
+        this.superclass = superclass;
+        this.interfaces = interfaces;
         this.classStatements = classStatements;
     }
 
-
     @Override
-    public String toString()
+    public void write(HierarchicalWriter writer)
     {
-        StringBuilder sb = new StringBuilder();
+        writer.print("class ");
+        writer.print(className);
 
-        sb.append("class ");
-        sb.append(className);
-        sb.append("{");
+        if (superclass != null)
+        {
+            writer.print(" extends ");
+            writer.print(superclass);
+        }
+
+        if (interfaces != null)
+        {
+            writer.print(" implements ");
+            boolean first = false;
+            for (String interfaceObj : interfaces)
+            {
+                if (first)
+                {
+                    writer.print(", ");
+                }
+
+                writer.print(interfaceObj);
+                first = true;
+            }
+        }
+
+        writer.println("{");
+        writer.enterLevel();
 
         for (ClassStatement expression : classStatements)
         {
-            sb.append(expression);
-            sb.append(';');
+            writer.print(expression);
+            writer.println(";");
         }
 
-        sb.append("}");
-
-
-        return sb.toString();
+        writer.leaveLevel();
+        writer.print("}");
     }
 }

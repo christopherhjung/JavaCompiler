@@ -4,23 +4,22 @@ import com.christophejung.HierarchicalWriter;
 import com.christophejung.Program;
 import com.christophejung.statements.Expression;
 
-public class IfStatement extends Program implements Statement
+public class AssignSub extends Program implements Expression, Statement
 {
-    private Expression condition;
-    private Statement expression;
+    private Expression varName;
+    private Expression expression;
 
-    public IfStatement(Expression condition, Statement expression)
+    public AssignSub(Expression varName, Expression expression)
     {
-        this.condition = condition;
+        this.varName = varName;
         this.expression = expression;
     }
 
     @Override
     public void write(HierarchicalWriter writer)
     {
-        writer.print("if(");
-        writer.print(condition);
-        writer.print(")");
+        writer.print(varName);
+        writer.print(" -= ");
         writer.print(expression);
     }
 }

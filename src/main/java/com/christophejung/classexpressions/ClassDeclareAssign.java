@@ -1,8 +1,10 @@
 package com.christophejung.classexpressions;
 
+import com.christophejung.HierarchicalWriter;
+import com.christophejung.Program;
 import com.christophejung.methodexpressions.Assign;
 
-public class ClassDeclareAssign implements ClassStatement
+public class ClassDeclareAssign extends Program implements ClassStatement
 {
     private String varType;
     private Assign value;
@@ -14,8 +16,10 @@ public class ClassDeclareAssign implements ClassStatement
     }
 
     @Override
-    public String toString()
+    public void write(HierarchicalWriter writer)
     {
-        return varType + " " + value;
+        writer.print(varType);
+        writer.print(" ");
+        writer.print(value);
     }
 }

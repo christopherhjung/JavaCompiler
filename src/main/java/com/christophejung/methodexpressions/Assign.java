@@ -1,21 +1,25 @@
 package com.christophejung.methodexpressions;
 
+import com.christophejung.HierarchicalWriter;
+import com.christophejung.Program;
 import com.christophejung.statements.Expression;
 
-public class Assign implements Expression, Statement
+public class Assign extends Program implements Expression, Statement
 {
-    private String varName;
+    private Expression varName;
     private Expression expression;
 
-    public Assign(String varName, Expression expression)
+    public Assign(Expression varName, Expression expression)
     {
         this.varName = varName;
         this.expression = expression;
     }
 
     @Override
-    public String toString()
+    public void write(HierarchicalWriter writer)
     {
-        return varName + " = " + expression;
+        writer.print(varName);
+        writer.print("=");
+        writer.print(expression);
     }
 }

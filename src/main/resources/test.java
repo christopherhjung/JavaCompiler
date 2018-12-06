@@ -1,13 +1,20 @@
-class Text
+public class Block implements Statement, ClassStatement
 {
+    private List exp = null;
 
-    void test(int e, String key)
+    void Block(List exp)
     {
+        this.exp = exp;
+    }
 
-        a = new String(3 + 4);
+    String toString()
+    {
+        StringBuilder sb = new StringBuilder();
 
-        test();
-        lol.lol.lol().lol();
-        new String(test());
+        sb.append("{");
+        sb.append("}");
+
+
+        return sb.toString();
     }
 }

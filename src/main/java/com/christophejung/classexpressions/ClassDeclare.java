@@ -1,6 +1,9 @@
 package com.christophejung.classexpressions;
 
-public class ClassDeclare implements ClassStatement
+import com.christophejung.HierarchicalWriter;
+import com.christophejung.Program;
+
+public class ClassDeclare extends Program implements ClassStatement
 {
     private String varType;
     private String varName;
@@ -12,8 +15,10 @@ public class ClassDeclare implements ClassStatement
     }
 
     @Override
-    public String toString()
+    public void write(HierarchicalWriter writer)
     {
-        return varType + " " + varName;
+        writer.print(varType);
+        writer.print(" ");
+        writer.print(varName);
     }
 }

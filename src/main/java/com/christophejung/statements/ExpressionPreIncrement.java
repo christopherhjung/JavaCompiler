@@ -1,9 +1,11 @@
 package com.christophejung.statements;
 
 
+import com.christophejung.HierarchicalWriter;
+import com.christophejung.Program;
 import com.christophejung.methodexpressions.Statement;
 
-public class ExpressionPreIncrement implements Expression, Statement
+public class ExpressionPreIncrement extends Program implements Expression, Statement
 {
     private Expression left;
 
@@ -13,8 +15,9 @@ public class ExpressionPreIncrement implements Expression, Statement
     }
 
     @Override
-    public String toString()
+    public void write(HierarchicalWriter writer)
     {
-        return "++" + left;
+        writer.print("++");
+        writer.print(left);
     }
 }

@@ -1,10 +1,11 @@
 package com.christophejung;
 
+import com.christophejung.classexpressions.ClassStatement;
 import com.christophejung.methodexpressions.Statement;
 
 import java.util.List;
 
-public class Block implements Statement
+public class Block extends Program implements Statement, ClassStatement
 {
     private List<Statement> classExpressions;
 
@@ -30,5 +31,21 @@ public class Block implements Statement
 
 
         return sb.toString();
+    }
+
+    @Override
+    public void write(HierarchicalWriter writer)
+    {
+        writer.println("{");
+        writer.enterLevel();
+
+        for (Statement expression : classExpressions)
+        {
+            writer.print(expression);
+            writer.println(";");
+        }
+
+        writer.leaveLevel();
+        writer.println("}");
     }
 }

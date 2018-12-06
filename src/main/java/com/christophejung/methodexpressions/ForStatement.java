@@ -1,8 +1,10 @@
 package com.christophejung.methodexpressions;
 
+import com.christophejung.HierarchicalWriter;
+import com.christophejung.Program;
 import com.christophejung.statements.Expression;
 
-public class ForStatement implements Statement
+public class ForStatement extends Program implements Statement
 {
     private Expression condition;
     private Statement expression;
@@ -18,20 +20,15 @@ public class ForStatement implements Statement
     }
 
     @Override
-    public String toString()
+    public void write(HierarchicalWriter writer)
     {
-        StringBuilder sb = new StringBuilder();
-
-        sb.append("for(");
-        sb.append(init);
-        sb.append(" ; ");
-        sb.append(condition);
-        sb.append(" ; ");
-        sb.append(increment);
-        sb.append(")");
-
-        sb.append(expression);
-
-        return sb.toString();
+        writer.print("for(");
+        writer.print(init);
+        writer.print(" ; ");
+        writer.print(condition);
+        writer.print(" ; ");
+        writer.print(increment);
+        writer.print(")");
+        writer.print(expression);
     }
 }

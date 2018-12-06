@@ -1,6 +1,9 @@
 package com.christophejung.statements;
 
-public class ExpressionBitwiseOr implements Expression
+import com.christophejung.HierarchicalWriter;
+import com.christophejung.Program;
+
+public class ExpressionBitwiseOr extends Program implements Expression
 {
     private Expression left;
     private Expression right;
@@ -12,8 +15,10 @@ public class ExpressionBitwiseOr implements Expression
     }
 
     @Override
-    public String toString()
+    public void write(HierarchicalWriter writer)
     {
-        return left + " | " + right;
+        writer.print(left);
+        writer.print("|");
+        writer.print(right);
     }
 }

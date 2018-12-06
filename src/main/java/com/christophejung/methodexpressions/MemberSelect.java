@@ -1,9 +1,11 @@
 package com.christophejung.methodexpressions;
 
+import com.christophejung.HierarchicalWriter;
+import com.christophejung.Program;
 import com.christophejung.statements.Expression;
 import com.christophejung.statements.ExpressionVariable;
 
-public class MemberSelect implements Statement, Expression
+public class MemberSelect extends Program implements Statement, Expression
 {
     private Expression expression;
     private Expression methodCall;
@@ -15,14 +17,10 @@ public class MemberSelect implements Statement, Expression
     }
 
     @Override
-    public String toString()
+    public void write(HierarchicalWriter writer)
     {
-        StringBuilder sb = new StringBuilder();
-
-        sb.append(expression);
-        sb.append(".");
-        sb.append(methodCall);
-
-        return sb.toString();
+        writer.print(expression);
+        writer.print(".");
+        writer.print(methodCall);
     }
 }

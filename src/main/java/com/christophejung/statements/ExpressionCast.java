@@ -1,9 +1,11 @@
 package com.christophejung.statements;
 
 
+import com.christophejung.HierarchicalWriter;
+import com.christophejung.Program;
 import com.christophejung.methodexpressions.Statement;
 
-public class ExpressionCast implements Expression, Statement
+public class ExpressionCast extends Program implements Expression, Statement
 {
     private String type;
     private Expression left;
@@ -15,8 +17,11 @@ public class ExpressionCast implements Expression, Statement
     }
 
     @Override
-    public String toString()
+    public void write(HierarchicalWriter writer)
     {
-        return "(" + type + ")" + left;
+        writer.print("(");
+        writer.print(type);
+        writer.print(")");
+        writer.print(left);
     }
 }

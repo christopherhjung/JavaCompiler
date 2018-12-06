@@ -1,6 +1,9 @@
 package com.christophejung.methodexpressions;
 
-public class Declare implements Statement
+import com.christophejung.HierarchicalWriter;
+import com.christophejung.Program;
+
+public class Declare extends Program implements Statement
 {
     private String varType;
     private String varName;
@@ -12,8 +15,10 @@ public class Declare implements Statement
     }
 
     @Override
-    public String toString()
+    public void write(HierarchicalWriter writer)
     {
-        return varType + " " + varName;
+        writer.print(varType);
+        writer.print(" ");
+        writer.print(varName);
     }
 }
