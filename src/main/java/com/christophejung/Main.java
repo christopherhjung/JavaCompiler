@@ -6,6 +6,8 @@ import com.christopherjung.scanner.ScanJob;
 import com.christopherjung.scanner.Scanner;
 import com.christopherjung.translator.TDLParser;
 
+import java.util.regex.Pattern;
+
 
 public class Main
 {
@@ -20,7 +22,7 @@ public class Main
         long meausurements = 100;
         try
         {
-            ScanJob scanJob = new ScanJob(scanner, StreamUtils.getFileStream("test.java"));
+            ScanJob scanJob = new ScanJob(scanner, StreamUtils.getFileStream("test2.java"));
 
             long start = System.currentTimeMillis();
             o = parser.parse(scanJob);
@@ -34,22 +36,8 @@ public class Main
             e.printStackTrace();
         }
 
-        if (o instanceof Program)
-        {
-            Program program = (Program) o;
 
-            HierarchicalWriter writer = new HierarchicalWriter();
-
-            program.write(writer);
-
-            System.out.println(writer.toString());
-
-        }
-        else
-        {
-            System.out.println(o);
-        }
-
+        System.out.println(o);
 
     }
 }

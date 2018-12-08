@@ -10,6 +10,7 @@ import com.christopherjung.reflectparser.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("all")
 public class JavaParser
 {
     @ScannerSingle
@@ -18,100 +19,11 @@ public class JavaParser
     @ScannerIgnore
     public static String ignore = "\\s+";
 
-    @ScannerToken("*=")
-    public static String multiplyAssign = "\\*\\=";
+    @ScannerIgnore
+    public static String comment = "/\\*([^*]|\\*+[^*/])*\\*+/";
 
-    @ScannerToken("*")
-    public static String multiply = "\\*";
-
-    @ScannerToken("/=")
-    public static String divideAssign = "\\/\\=";
-
-    @ParserIgnore
-    @ScannerToken
-    public static String comment = "\\/\\*([^*]|\\*+[^*\\/])*\\*+\\/";
-
-    @ParserIgnore
-    @ScannerToken
-    public static String singleLineComment = "\\/\\/[^\n]+";
-
-    @ScannerToken("/")
-    public static String divide = "\\/";
-
-    @ScannerToken("||")
-    public static String booleanOr = "\\|\\|";
-
-    @ScannerToken("||=")
-    public static String booleanOrAssign = "\\|\\|\\=";
-
-    @ScannerToken("|")
-    public static String bitwiseOr = "\\|";
-
-    @ScannerToken("|=")
-    public static String bitwiseOrAssign = "\\|\\=";
-
-    @ScannerToken("&&")
-    public static String booleanAnd = "\\&\\&";
-
-    @ScannerToken("&&=")
-    public static String booleanAndAssign = "\\&\\&\\=";
-
-    @ScannerToken("&")
-    public static String bitwiseAnd = "\\&";
-
-    @ScannerToken("&=")
-    public static String bitwiseAndAssign = "\\&\\=";
-
-    @ScannerToken("++")
-    public static String increment = "\\+\\+";
-
-    @ScannerToken("+=")
-    public static String addAssign = "\\+\\=";
-
-    @ScannerToken("+")
-    public static String add = "\\+";
-
-    @ScannerToken("--")
-    public static String decrement = "\\-\\-";
-
-    @ScannerToken("-=")
-    public static String decrementAssign = "\\-\\=";
-
-    @ScannerToken("-")
-    public static String sub = "\\-";
-
-    @ScannerToken("==")
-    public static String equals = "==";
-
-    @ScannerToken("!=")
-    public static String notEquals = "!=";
-
-    @ScannerToken("=")
-    public static String assign = "=";
-
-    @ScannerToken(">=")
-    public static String greaterEquals = ">=";
-
-    @ScannerToken("<=")
-    public static String smallerEquals = "<=";
-
-    @ScannerToken(">>")
-    public static String shiftRight = ">>";
-
-    @ScannerToken(">>=")
-    public static String shiftRightAssign = ">>=";
-
-    @ScannerToken("<<")
-    public static String shiftLeft = "<<";
-
-    @ScannerToken("<<=")
-    public static String shiftLeftAssign = "<<=";
-
-    @ScannerToken(">")
-    public static String greater = ">";
-
-    @ScannerToken("<")
-    public static String smaller = "<";
+    @ScannerIgnore
+    public static String singleLineComment = "//[^\n]+";
 
     @ScannerToken
     public static String importKeyword = "import";
@@ -121,6 +33,9 @@ public class JavaParser
 
     @ScannerToken
     public static String ifKeyword = "if";
+
+    @ScannerToken
+    public static String elseKeyword = "else";
 
     @ScannerToken
     public static String whileKeyword = "while";
@@ -144,16 +59,127 @@ public class JavaParser
     public static String implementsKeyword = "implements";
 
     @ScannerToken
+    public static String abstractKeyword = "abstract";
+
+    @ScannerToken
+    public static String throwsKeyword = "throws";
+
+    @ScannerToken
+    public static String throwKeyword = "throw";
+
+    @ScannerToken
+    public static String tryKeyword = "try";
+
+    @ScannerToken
+    public static String catchKeyword = "catch";
+
+    @ScannerToken
+    public static String thisKeyword = "this";
+
+    @ScannerToken
     public static String visibility = "public|private|protected";
+
+    @ScannerToken
+    public static String booleanValue = "true|false";
 
     @ScannerToken
     public static String number = "[-+]?[0-9]+(\\.[0-9]+)?([eE][+-]?[0-9]+)?";
 
     @ScannerToken
-    public static String string = "\"[^\"]*\"";
+    public static String word = "[a-zA-Z_]\\w*";
 
     @ScannerToken
-    public static String word = "[a-zA-Z]\\w*";
+    public static String string = "\"[^\"]*\"";
+
+    @ScannerToken("++")
+    public static String increment = "\\+\\+";
+
+    @ScannerToken("+=")
+    public static String addAssign = "\\+=";
+
+    @ScannerToken("+")
+    public static String add = "\\+";
+
+    @ScannerToken("--")
+    public static String decrement = "\\-\\-";
+
+    @ScannerToken("-=")
+    public static String decrementAssign = "\\-=";
+
+    @ScannerToken("-")
+    public static String sub = "\\-";
+
+    @ScannerToken("==")
+    public static String equals = "==";
+
+    @ScannerToken("=")
+    public static String assign = "=";
+
+    @ScannerToken("!=")
+    public static String notEquals = "!=";
+
+    @ScannerToken("!")
+    public static String not = "!";
+
+    @ScannerToken(">=")
+    public static String greaterEquals = ">=";
+
+    @ScannerToken(">")
+    public static String greater = ">";
+
+    @ScannerToken("<=")
+    public static String smallerEquals = "<=";
+
+    @ScannerToken("<")
+    public static String smaller = "<";
+
+    @ScannerToken("*=")
+    public static String multiplyAssign = "\\*=";
+
+    @ScannerToken("*")
+    public static String multiply = "\\*";
+
+    @ScannerToken("/=")
+    public static String divideAssign = "/=";
+
+    @ScannerToken("/")
+    public static String divide = "/";
+
+    @ScannerToken("||=")
+    public static String booleanOrAssign = "\\|\\|\\=";
+
+    @ScannerToken("||")
+    public static String booleanOr = "\\|\\|";
+
+    @ScannerToken("|=")
+    public static String bitwiseOrAssign = "\\|=";
+
+    @ScannerToken("|")
+    public static String bitwiseOr = "\\|";
+
+    @ScannerToken("&&=")
+    public static String booleanAndAssign = "&&=";
+
+    @ScannerToken("&&")
+    public static String booleanAnd = "&&";
+
+    @ScannerToken("&=")
+    public static String bitwiseAndAssign = "&=";
+
+    @ScannerToken("&")
+    public static String bitwiseAnd = "&";
+
+    @ScannerToken(">>=")
+    public static String shiftRightAssign = ">>=";
+
+    @ScannerToken(">>")
+    public static String shiftRight = ">>";
+
+    @ScannerToken("<<=")
+    public static String shiftLeftAssign = "<<=";
+
+    @ScannerToken("<<")
+    public static String shiftLeft = "<<";
 
 
     @ParserRoot("clazz:class EOF")
@@ -162,8 +188,8 @@ public class JavaParser
         return clazz;
     }
 
-    @ParserRule("class -> visibility? classKeyword className:word superclass:extends? interfaces:implements? { classStatements }")
-    public static ClassContainer classValue(String visibility, String className, List<ClassStatement> classStatements, String superclass, List<String> interfaces)
+    @ParserRule("class -> visibility? abstractKeyword? classKeyword className:type superclass:extends? interfaces:implements? { classStatements }")
+    public static ClassContainer classValue(String visibility, Type className, List<ClassStatement> classStatements, String superclass, List<String> interfaces)
     {
         return new ClassContainer(className, superclass, interfaces, classStatements);
     }
@@ -206,8 +232,8 @@ public class JavaParser
         return classStatements;
     }
 
-    @ParserRule("classStatement -> visibility? varType:word assign ;")
-    public static ClassDeclareAssign classDeclareAssign(String varType, Assign assign)
+    @ParserRule("classStatement -> visibility? varType:type assign ;")
+    public static ClassDeclareAssign classDeclareAssign(Type varType, Assign assign)
     {
         return new ClassDeclareAssign(varType, assign);
     }
@@ -274,9 +300,11 @@ public class JavaParser
 
     @ParserRule("methodStatement -> statement:if")
     @ParserRule("methodStatement -> statement:block")
+    @ParserRule("methodStatement -> statement:tryCatch")
     @ParserRule("methodStatement -> statement:while")
     @ParserRule("methodStatement -> statement:singleLineStatement ;")
     @ParserRule("methodStatement -> statement:return ;")
+    @ParserRule("methodStatement -> statement:throw ;")
     public static Statement methodStatement(Statement statement)
     {
         return statement;
@@ -286,6 +314,12 @@ public class JavaParser
     public static Statement returnStatement(Expression expression)
     {
         return new ReturnStatement(expression);
+    }
+
+    @ParserRule("throw -> throwKeyword expression")
+    public static Statement throwStatement(Expression expression)
+    {
+        return new ThrowStatement(expression);
     }
 
     @ParserRule("singleLineStatement -> statement:assign")
@@ -299,24 +333,61 @@ public class JavaParser
         return statement;
     }
 
-    @ParserRule("declareAssign -> varType:word varName:word = expression")
-    public static Statement varDefAssign(String varType, String varName, Expression expression)
+    @ParserRule("declareAssign -> varType:type varName:word = expression")
+    public static Statement varDefAssign(Type varType, String varName, Expression expression)
     {
         return new DeclareAssign(varType, varName, expression);
     }
 
-    @ParserRule("declare -> varType:word varName:word")
-    public static Declare declare(String varType, String varName)
+    @ParserRule("declare -> varType:type varName:word")
+    public static Declare declare(Type varType, String varName)
     {
         return new Declare(varType, varName);
     }
 
-    //if
-
-    @ParserRule("if -> ifKeyword ( expression ) inner:methodStatement")
-    public static IfStatement expression(Expression expression, Statement inner)
+    @ParserRule("type -> varType:word")
+    public static Type type(String varType)
     {
-        return new IfStatement(expression, inner);
+        return new Type(varType);
+    }
+
+    @ParserRule("type -> varType:word < generics:types? >")
+    public static Type type(String varType, List<Type> generics)
+    {
+        return new Type(varType, generics);
+    }
+
+    @ParserRule("types -> (types ,)? type")
+    public static List<Type> types(List<Type> types, Type type)
+    {
+        if (types == null)
+        {
+            types = new ArrayList<>();
+        }
+
+        types.add(type);
+
+        return types;
+    }
+
+
+    //if
+    @ParserRule("if -> ifKeyword ( expression ) ifBranch:methodStatement")
+    public static IfStatement expression(Expression expression, Statement ifBranch)
+    {
+        return new IfStatement(expression, ifBranch);
+    }
+
+    @ParserRule("if -> ifKeyword ( expression ) ifBranch:methodStatement elseKeyword elseBranch:methodStatement")
+    public static IfElseStatement expression(Expression expression, Statement ifBranch, Statement elseBranch)
+    {
+        return new IfElseStatement(expression, ifBranch, elseBranch);
+    }
+
+    @ParserRule("tryCatch -> tryKeyword tryBranch:methodStatement catchKeyword catchBranch:methodStatement")
+    public static TryCatchStatement expression(Statement tryBranch, Statement catchBranch)
+    {
+        return new TryCatchStatement(tryBranch, catchBranch);
     }
 
     //While
@@ -553,7 +624,7 @@ public class JavaParser
     @ParserRule("cast -> ( type:word ) increment")
     public static Expression cast(String type, Expression increment)
     {
-        return new ExpressionCast(type, increment);
+        return new ExpressionCast(new Type(type), increment);
     }
 
     @ParserRule("cast -> increment")
@@ -606,10 +677,10 @@ public class JavaParser
         return newArray;
     }
 
-    @ParserRule("newInstance -> newKeyword variable expressionParenthesis")
-    public static ExpressionNewInstance newInstance(Expression variable, List<Expression> expressionParenthesis)
+    @ParserRule("newInstance -> newKeyword type expressionParenthesis")
+    public static ExpressionNewInstance newInstance(Type type, List<Expression> expressionParenthesis)
     {
-        return new ExpressionNewInstance(variable, expressionParenthesis);
+        return new ExpressionNewInstance(type, expressionParenthesis);
     }
 
     @ParserRule("newArray -> newKeyword variable [ dimension:expression ]")
@@ -618,10 +689,11 @@ public class JavaParser
         return new ExpressionNewArray(variable, dimension);
     }
 
-    @ParserRule("member -> member . rawExpression")
-    public static Expression member(Expression member, Expression rawExpression)
+    @ParserRule("member -> member . name:word")
+    @ParserRule("member -> member . name:classKeyword")
+    public static Expression member(Expression member, String name)
     {
-        return new MemberSelect(member, rawExpression);
+        return new MemberSelect(member, name);
     }
 
     @ParserRule("member -> ( expression )")
@@ -685,16 +757,14 @@ public class JavaParser
         return variable;
     }
 
-
     @ParserRule("variable -> key:word")
     public static ExpressionVariable variable(String key)
     {
         return new ExpressionVariable(key);
     }
 
-
     @ParserRule("rawExpression -> key:number")
-    public static ExpressionDouble testing(String key)
+    public static ExpressionDouble doubleExpression(String key)
     {
         return new ExpressionDouble(Double.parseDouble(key));
     }
@@ -705,9 +775,21 @@ public class JavaParser
         return new ExpressionString(key.substring(1, key.length() - 1));
     }
 
+    @ParserRule("rawExpression -> key:booleanValue")
+    public static ExpressionBoolean booleanValue(String key)
+    {
+        return new ExpressionBoolean(Boolean.parseBoolean(key));
+    }
+
     @ParserRule("rawExpression -> nullKeyword")
     public static ExpressionNull nullKeyword()
     {
         return new ExpressionNull();
+    }
+
+    @ParserRule("rawExpression -> thisKeyword")
+    public static ExpressionThis thisKeyword()
+    {
+        return new ExpressionThis();
     }
 }

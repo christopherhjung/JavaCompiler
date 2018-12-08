@@ -8,12 +8,12 @@ import com.christophejung.statements.ExpressionVariable;
 public class MemberSelect extends Program implements Statement, Expression
 {
     private Expression expression;
-    private Expression methodCall;
+    private String name;
 
-    public MemberSelect(Expression expression, Expression methodCall)
+    public MemberSelect(Expression expression, String name)
     {
         this.expression = expression;
-        this.methodCall = methodCall;
+        this.name = name;
     }
 
     @Override
@@ -21,6 +21,6 @@ public class MemberSelect extends Program implements Statement, Expression
     {
         writer.print(expression);
         writer.print(".");
-        writer.print(methodCall);
+        writer.print(name);
     }
 }

@@ -2,16 +2,17 @@ package com.christophejung.statements;
 
 import com.christophejung.HierarchicalWriter;
 import com.christophejung.Program;
+import com.christophejung.Type;
 import com.christophejung.methodexpressions.Statement;
 
 import java.util.List;
 
 public class ExpressionNewInstance extends Program implements Expression, Statement
 {
-    private Expression target;
+    private Type target;
     private List<Expression> values;
 
-    public ExpressionNewInstance(Expression target, List<Expression> values)
+    public ExpressionNewInstance(Type target, List<Expression> values)
     {
         this.target = target;
         this.values = values;

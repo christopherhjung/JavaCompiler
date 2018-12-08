@@ -15,25 +15,6 @@ public class Block extends Program implements Statement, ClassStatement
     }
 
     @Override
-    public String toString()
-    {
-        StringBuilder sb = new StringBuilder();
-
-        sb.append("{");
-
-        for (Statement expression : classExpressions)
-        {
-            sb.append(expression);
-            sb.append(';');
-        }
-
-        sb.append("}");
-
-
-        return sb.toString();
-    }
-
-    @Override
     public void write(HierarchicalWriter writer)
     {
         writer.println("{");
@@ -42,7 +23,7 @@ public class Block extends Program implements Statement, ClassStatement
         for (Statement expression : classExpressions)
         {
             writer.print(expression);
-            writer.println(";");
+            if( !writer.isNewLine() ) writer.println(";");
         }
 
         writer.leaveLevel();

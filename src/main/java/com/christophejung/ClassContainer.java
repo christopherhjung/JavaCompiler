@@ -6,12 +6,12 @@ import java.util.List;
 
 public class ClassContainer extends Program
 {
-    private String className;
+    private Type className;
     private List<ClassStatement> classStatements;
     private String superclass;
     private List<String> interfaces;
 
-    public ClassContainer(String className, String superclass, List<String> interfaces, List<ClassStatement> classStatements)
+    public ClassContainer(Type className, String superclass, List<String> interfaces, List<ClassStatement> classStatements)
     {
         this.className = className;
         this.superclass = superclass;
@@ -53,7 +53,7 @@ public class ClassContainer extends Program
         for (ClassStatement expression : classStatements)
         {
             writer.print(expression);
-            writer.println(";");
+            if( !writer.isNewLine() ) writer.println(";");
         }
 
         writer.leaveLevel();

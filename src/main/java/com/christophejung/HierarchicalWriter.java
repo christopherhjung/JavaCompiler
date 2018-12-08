@@ -1,5 +1,7 @@
 package com.christophejung;
 
+import java.util.Objects;
+
 public class HierarchicalWriter
 {
     private StringBuilder builder;
@@ -10,6 +12,11 @@ public class HierarchicalWriter
     {
         builder = new StringBuilder();
         level = 0;
+    }
+
+    public boolean isNewLine()
+    {
+        return !levelWritten;
     }
 
     public void enterLevel()
@@ -44,7 +51,7 @@ public class HierarchicalWriter
         }
         else
         {
-            print(obj.toString());
+            print(Objects.toString(obj));
         }
     }
 
