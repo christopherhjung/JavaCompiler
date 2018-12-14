@@ -1,20 +1,30 @@
-public class Block implements Statement, ClassStatement
+public class Main
 {
-    private List exp = null;
-
-    void Block(List exp)
+    public static void main()
     {
-        this.exp = exp;
+        int num = 9;
+
+        test(num);
+
+        for (int i : test)
+        {
+            int t = 9;
+            {
+                int lol;
+            }
+        }
+
+
+        short b = 10;
+        int a = 9;
+        short c = 11;
+
+        test(a);
+        test(b);
+        test(c);
     }
 
-    String toString()
-    {
-        StringBuilder sb = new StringBuilder();
+    int test(int num){
 
-        sb.append("{");
-        sb.append("}");
-
-
-        return sb.toString();
     }
 }

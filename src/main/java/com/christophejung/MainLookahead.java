@@ -1,31 +1,24 @@
 package com.christophejung;
 
-import com.christopherjung.grammar.Grammar;
-import com.christopherjung.grammar.ModifierSource;
-import com.christopherjung.reflectparser.ReflectScannerGenerator;
-import com.christopherjung.reflectparser.ReflectTLDGenerator;
-import com.christopherjung.scanner.ScanJob;
-import com.christopherjung.scanner.Scanner;
-import com.christopherjung.translator.ParserTable;
-import com.christopherjung.translator.ParserTableGenerator;
-import com.christopherjung.translator.TDLParser;
-import com.christopherjung.translator.TDLUtils;
+import com.christopherjung.regex.ConcatStates;
+import com.christopherjung.regex.Pattern;
+import com.christopherjung.regex.State;
+
+import java.util.LinkedHashMap;
 
 
 public class MainLookahead
 {
     public static void main(String[] args)
     {
-        Scanner.Builder builder = new Scanner.Builder();
-        builder.addAll(StreamUtils.getFileStream("nullable.scanner"));
-        Scanner scanner = builder.build();
+        var stat = Pattern.compile("ab(?=[c])");
+        var next = Pattern.compile("[abc]+");
 
-        Grammar.Builder grammarBuilder = new Grammar.Builder();
-        grammarBuilder.addRules(StreamUtils.getFileStream("nullable.tdl"));
-        Grammar grammar = grammarBuilder.build();
+        var map = new LinkedHashMap<String, State<Character>>();
 
-        ParserTable table = new ParserTableGenerator().generate(grammar);
+        map.put("if", stat);
+        map.put("word", next);
 
-        System.out.println(TDLUtils.toString(table));
+        ConcatStates.create(map);
     }
 }

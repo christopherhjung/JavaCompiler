@@ -3,23 +3,23 @@ object -> { }
 object -> { members }
 members -> JSONPair
 members -> JSONPair , members
-JSONPair -> string : value
+JSONPair -> string : right
 array -> [ ]
 array -> [ elements ]
-elements -> value
-elements -> value , elements
-value -> string
-value -> number
-value -> object
-value -> array
-value -> true
-value -> false
-value -> null
+elements -> right
+elements -> right , elements
+right -> string
+right -> number
+right -> object
+right -> array
+right -> true
+right -> false
+right -> null
 
 start -> object EOF
 object -> { } | { members }
 members -> JSONPair | JSONPair , members
-JSONPair -> string : value
+JSONPair -> string : right
 array -> [ ] | [ elements ] ::=
-elements -> value | value , elements
-value -> string | number | object | array | true | false | null
+elements -> right | right , elements
+right -> string | number | object | array | true | false | null

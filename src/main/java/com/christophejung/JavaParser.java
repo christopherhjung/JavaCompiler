@@ -1,13 +1,15 @@
 package com.christophejung;
 
-import com.christophejung.classexpressions.ClassDeclareAssign;
-import com.christophejung.classexpressions.ClassStatement;
-import com.christophejung.classexpressions.MethodContainer;
-import com.christophejung.methodexpressions.*;
-import com.christophejung.statements.*;
+import com.christophejung.container.Block;
+import com.christophejung.container.ClassContainer;
+import com.christophejung.container.Type;
+import com.christophejung.container.classexpressions.ClassDeclareAssign;
+import com.christophejung.container.classexpressions.ClassStatement;
+import com.christophejung.container.classexpressions.MethodContainer;
+import com.christophejung.container.methodexpressions.*;
+import com.christophejung.container.statements.*;
 import com.christopherjung.reflectparser.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings("all")
@@ -26,61 +28,64 @@ public class JavaParser
     public static String singleLineComment = "//[^\n]+";
 
     @ScannerToken
-    public static String importKeyword = "import";
+    public static String importKeyword = "import(?=[^\\w])";
 
     @ScannerToken
-    public static String classKeyword = "class";
+    public static String classKeyword = "class(?=[^\\w])";
 
     @ScannerToken
-    public static String ifKeyword = "if";
+    public static String ifKeyword = "if(?=[^\\w])";
 
     @ScannerToken
-    public static String elseKeyword = "else";
+    public static String elseKeyword = "else(?=[^\\w])";
 
     @ScannerToken
-    public static String whileKeyword = "while";
+    public static String whileKeyword = "while(?=[^\\w])";
 
     @ScannerToken
-    public static String forKeyword = "for";
+    public static String forKeyword = "for(?=[^\\w])";
 
     @ScannerToken
-    public static String newKeyword = "new";
+    public static String newKeyword = "new(?=[^\\w])";
 
     @ScannerToken
-    public static String nullKeyword = "null";
+    public static String nullKeyword = "null(?=[^\\w])";
 
     @ScannerToken
-    public static String returnKeyword = "return";
+    public static String returnKeyword = "return(?=[^\\w])";
 
     @ScannerToken
-    public static String extendsKeyword = "extends";
+    public static String extendsKeyword = "extends(?=[^\\w])";
 
     @ScannerToken
-    public static String implementsKeyword = "implements";
+    public static String implementsKeyword = "implements(?=[^\\w])";
 
     @ScannerToken
-    public static String abstractKeyword = "abstract";
+    public static String abstractKeyword = "abstract(?=[^\\w])";
 
     @ScannerToken
-    public static String throwsKeyword = "throws";
+    public static String throwsKeyword = "throws(?=[^\\w])";
 
     @ScannerToken
-    public static String throwKeyword = "throw";
+    public static String throwKeyword = "throw(?=[^\\w])";
 
     @ScannerToken
-    public static String tryKeyword = "try";
+    public static String tryKeyword = "try(?=[^\\w])";
 
     @ScannerToken
-    public static String catchKeyword = "catch";
+    public static String catchKeyword = "catch(?=[^\\w])";
 
     @ScannerToken
-    public static String thisKeyword = "this";
+    public static String thisKeyword = "this(?=[^\\w])";
 
     @ScannerToken
-    public static String visibility = "public|private|protected";
+    public static String staticKeyword = "static(?=[^\\w])";
 
     @ScannerToken
-    public static String booleanValue = "true|false";
+    public static String visibility = "(public|private|protected)(?=[^\\w])";
+
+    @ScannerToken
+    public static String booleanValue = "(true|false)(?=[^\\w])";
 
     @ScannerToken
     public static String number = "[-+]?[0-9]+(\\.[0-9]+)?([eE][+-]?[0-9]+)?";
@@ -121,6 +126,12 @@ public class JavaParser
     @ScannerToken("!")
     public static String not = "!";
 
+    @ScannerToken("~=")
+    public static String bitwiseNotEquals = "~=";
+
+    @ScannerToken("~")
+    public static String bitwiseNot = "~";
+
     @ScannerToken(">=")
     public static String greaterEquals = ">=";
 
@@ -146,7 +157,7 @@ public class JavaParser
     public static String divide = "/";
 
     @ScannerToken("||=")
-    public static String booleanOrAssign = "\\|\\|\\=";
+    public static String booleanOrAssign = "\\|\\|=";
 
     @ScannerToken("||")
     public static String booleanOr = "\\|\\|";
@@ -181,7 +192,6 @@ public class JavaParser
     @ScannerToken("<<")
     public static String shiftLeft = "<<";
 
-
     @ParserRoot("clazz:class EOF")
     public static ClassContainer start(ClassContainer clazz)
     {
@@ -209,11 +219,6 @@ public class JavaParser
     @ParserRule("interfaces -> (interfaces ,)? word")
     public static List<String> implementsExpression(List<String> interfaces, String word)
     {
-        if (interfaces == null)
-        {
-            interfaces = new ArrayList<>();
-        }
-
         interfaces.add(word);
 
         return interfaces;
@@ -222,11 +227,6 @@ public class JavaParser
     @ParserRule("classStatements -> classStatements? classStatement")
     public static List<ClassStatement> classStatements(List<ClassStatement> classStatements, ClassStatement classStatement)
     {
-        if (classStatements == null)
-        {
-            classStatements = new ArrayList<>();
-        }
-
         classStatements.add(classStatement);
 
         return classStatements;
@@ -250,49 +250,49 @@ public class JavaParser
         return method;
     }
 
-    @ParserRule("method -> visibility? returnType:word methodName:word ( declarations? ) inner:block")
-    public static MethodContainer nonEmptyObject(String visibility, String methodName, String returnType, List<Declare> declarations, Block inner)
+    @ParserRule("method -> visibility? staticKeyword? returnType:word methodName:word ( declarations? ) inner:block")
+    public static MethodContainer nonEmptyObject(String visibility, String staticKeyword, String methodName, String returnType, List<Declare> declarations, Block inner)
     {
-        if (declarations == null)
+        int modifier = 0;
+
+        if ("public".equals(visibility))
         {
-            declarations = new ArrayList<>();
+            modifier |= 1;
+        }
+        else if ("private".equals(visibility))
+        {
+            modifier |= 2;
+        }
+        else if ("protected".equals(visibility))
+        {
+            modifier |= 4;
         }
 
-        return new MethodContainer(methodName, returnType, declarations, inner);
+        if ("static".equals(staticKeyword))
+        {
+            modifier |= 8;
+        }
+
+        return new MethodContainer(methodName, modifier, returnType, declarations, inner);
     }
 
     @ParserRule("block -> { methodStatements? }")
     public static Block nonEmptyObject(List<Statement> methodStatements)
     {
-        if (methodStatements == null)
-        {
-            methodStatements = new ArrayList<>();
-        }
-
         return new Block(methodStatements);
     }
 
     @ParserRule("declarations -> (declarations ,)? declare")
     public static List<Declare> declarations(List<Declare> declarations, Declare declare)
     {
-        if (declarations == null)
-        {
-            declarations = new ArrayList<>();
-        }
-
         declarations.add(declare);
 
         return declarations;
     }
 
     @ParserRule("methodStatements -> methodStatements? methodStatement")
-    public static List<Statement> methodStatments(Statement methodStatement, List<Statement> methodStatements)
+    public static List<Statement> methodStatments(List<Statement> methodStatements, Statement methodStatement)
     {
-        if (methodStatements == null)
-        {
-            methodStatements = new ArrayList<>();
-        }
-
         methodStatements.add(methodStatement);
 
         return methodStatements;
@@ -302,6 +302,8 @@ public class JavaParser
     @ParserRule("methodStatement -> statement:block")
     @ParserRule("methodStatement -> statement:tryCatch")
     @ParserRule("methodStatement -> statement:while")
+    @ParserRule("methodStatement -> statement:for")
+    @ParserRule("methodStatement -> statement:forEach")
     @ParserRule("methodStatement -> statement:singleLineStatement ;")
     @ParserRule("methodStatement -> statement:return ;")
     @ParserRule("methodStatement -> statement:throw ;")
@@ -351,7 +353,7 @@ public class JavaParser
         return new Type(varType);
     }
 
-    @ParserRule("type -> varType:word < generics:types? >")
+    @ParserRule("type -> varType:word < generics:types >")
     public static Type type(String varType, List<Type> generics)
     {
         return new Type(varType, generics);
@@ -360,11 +362,6 @@ public class JavaParser
     @ParserRule("types -> (types ,)? type")
     public static List<Type> types(List<Type> types, Type type)
     {
-        if (types == null)
-        {
-            types = new ArrayList<>();
-        }
-
         types.add(type);
 
         return types;
@@ -401,6 +398,12 @@ public class JavaParser
     public static ForStatement forStatement(Statement init, Expression condition, Expression increment, Statement inner)
     {
         return new ForStatement(init, condition, increment, inner);
+    }
+
+    @ParserRule("forEach -> forKeyword ( target:declare : iterator:expression ) inner:methodStatement")
+    public static ForEachStatement forStatement(Declare target, Expression iterator,  Statement inner)
+    {
+        return new ForEachStatement(target, iterator, inner);
     }
 
     @ParserRule("expression -> booleanOr")
@@ -440,9 +443,9 @@ public class JavaParser
     }
 
     @ParserRule("modifyAssign -> booleanOr *= expression")
-    public static AssignAdd assignMul(Expression booleanOr, Expression expression)
+    public static AssignMul assignMul(Expression booleanOr, Expression expression)
     {
-        return new AssignAdd(booleanOr, expression);
+        return new AssignMul(booleanOr, expression);
     }
 
     @ParserRule("modifyAssign -> booleanOr /= expression")
@@ -450,7 +453,6 @@ public class JavaParser
     {
         return new AssignDiv(booleanOr, expression);
     }
-
 
     //booleanOr
     @ParserRule("booleanOr -> booleanOr || booleanAnd")
@@ -479,7 +481,6 @@ public class JavaParser
     }
 
     //bitwiseOr
-
     @ParserRule("bitwiseOr -> bitwiseOr | bitwiseAnd")
     public static Expression bitwiseOr(Expression bitwiseOr, Expression bitwiseAnd)
     {
@@ -621,10 +622,28 @@ public class JavaParser
     //cast and new
 
 
+    @ParserRule("path -> (path .)? word")
+    public static String cast(String path, String word)
+    {
+        return path + word;
+    }
+
     @ParserRule("cast -> ( type:word ) increment")
     public static Expression cast(String type, Expression increment)
     {
         return new ExpressionCast(new Type(type), increment);
+    }
+
+    @ParserRule("cast -> + increment")
+    public static Expression unaryPlus(Expression member)
+    {
+        return new ExpressionUnaryPlus(member);
+    }
+
+    @ParserRule("cast -> - increment")
+    public static Expression unaryNegate(Expression member)
+    {
+        return new ExpressionUnaryMinus(member);
     }
 
     @ParserRule("cast -> increment")
@@ -658,6 +677,18 @@ public class JavaParser
         return new ExpressionPreDecrement(member);
     }
 
+    @ParserRule("increment -> ! member")
+    public static Expression logicNegate(Expression member)
+    {
+        return new ExpressionUnaryLogicNegate(member);
+    }
+
+    @ParserRule("increment -> ~ member")
+    public static Expression bitwiseNegate(Expression member)
+    {
+        return new ExpressionUnaryBitwiseNegate(member);
+    }
+
     @ParserRule("increment -> member")
     public static Expression incrementLoop(Expression member)
     {
@@ -683,10 +714,10 @@ public class JavaParser
         return new ExpressionNewInstance(type, expressionParenthesis);
     }
 
-    @ParserRule("newArray -> newKeyword variable [ dimension:expression ]")
-    public static ExpressionNewArray newArray(Expression variable, Expression dimension)
+    @ParserRule("newArray -> newKeyword type [ dimension:expression ]")
+    public static ExpressionNewArray newArray(Type type, Expression dimension)
     {
-        return new ExpressionNewArray(variable, dimension);
+        return new ExpressionNewArray(type, dimension);
     }
 
     @ParserRule("member -> member . name:word")
@@ -729,22 +760,12 @@ public class JavaParser
     @ParserRule("expressionParenthesis -> ( expressions? )")
     public static List<Expression> methodCall(List<Expression> expressions)
     {
-        if (expressions == null)
-        {
-            expressions = new ArrayList<>();
-        }
-
         return expressions;
     }
 
     @ParserRule("expressions -> (expressions ,)? expression")
     public static List<Expression> methodCall(List<Expression> expressions, Expression expression)
     {
-        if (expressions == null)
-        {
-            expressions = new ArrayList<>();
-        }
-
         expressions.add(expression);
 
         return expressions;
