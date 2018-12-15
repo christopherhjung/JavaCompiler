@@ -1,6 +1,7 @@
 package com.christophejung.symbol;
 
 import com.christophejung.container.Block;
+import com.christophejung.container.ClassContainer;
 import com.christophejung.container.Type;
 import com.christophejung.container.methodexpressions.*;
 import com.christophejung.container.statements.Expression;
@@ -14,6 +15,15 @@ public class SymbolLookup
     private static HashMap<String, Symbol> symbols;
     private static long position;
 
+    public static Map<String, Symbol> lookup(Block block)
+    {
+        symbols = new HashMap<>();
+
+        lookupRecursive(block.getExpressions());
+
+        return symbols;
+    }
+
     private static void add(String name, Type type)
     {
         if (symbols.containsKey(name))
@@ -24,28 +34,12 @@ public class SymbolLookup
         symbols.put(name, new Symbol(name, type));
     }
 
-    public static Map<String, Symbol> lookup(Block block)
+    private static void lookupRecursive(List<Statement> list)
     {
-        symbols = new HashMap<>();
-
-        lookupRecursive(block);
-
-        return symbols;
-    }
-
-    private static void lookupRecursive(Block block)
-    {
-        List<Statement> list = block.getExpressions();
-
         for (Statement statement : list)
         {
             lookupRecursive(statement);
         }
-    }
-
-    private static void lookupRecursive(Expression expression)
-    {
-
     }
 
     private static void lookupRecursive(Statement statement)
@@ -54,7 +48,9 @@ public class SymbolLookup
 
         if (statement instanceof Block)
         {
-            lookupRecursive((Block) statement);
+            Block block = (Block) statement;
+
+            lookupRecursive(block.getExpressions());
         }
         else if (statement instanceof WhileStatement)
         {

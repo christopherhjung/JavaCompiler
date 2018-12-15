@@ -15,12 +15,6 @@ public class ExpressionAdd extends Program implements Expression
     }
 
     @Override
-    public String toString()
-    {
-        return left + " + " + right;
-    }
-
-    @Override
     public void write(HierarchicalWriter writer)
     {
         writer.print(left);

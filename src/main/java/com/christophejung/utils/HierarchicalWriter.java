@@ -1,5 +1,6 @@
 package com.christophejung.utils;
 
+import java.util.Collection;
 import java.util.Objects;
 
 public class HierarchicalWriter
@@ -34,9 +35,42 @@ public class HierarchicalWriter
         level--;
     }
 
+    public void println(Collection<?> objs)
+    {
+        for (Object obj : objs)
+        {
+            println(obj);
+        }
+    }
+
+    public void println(Collection<?> objs, String seperator)
+    {
+        boolean first = false;
+        for (Object obj : objs)
+        {
+            if (first)
+            {
+                print(seperator);
+            }
+            println(obj);
+            first = true;
+        }
+    }
+
+    public void println(Object obj)
+    {
+        print(obj);
+        println();
+    }
+
     public void println(CharSequence str)
     {
         print(str);
+        println();
+    }
+
+    public void println()
+    {
         builder.append('\n');
         levelWritten = false;
     }

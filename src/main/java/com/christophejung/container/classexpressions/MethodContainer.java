@@ -1,9 +1,9 @@
 package com.christophejung.container.classexpressions;
 
 import com.christophejung.container.Block;
-import com.christophejung.utils.HierarchicalWriter;
 import com.christophejung.container.Program;
 import com.christophejung.container.methodexpressions.Declare;
+import com.christophejung.utils.HierarchicalWriter;
 
 import java.lang.reflect.Modifier;
 import java.util.List;
@@ -46,14 +46,17 @@ public class MethodContainer extends Program implements ClassStatement
         writer.print("(");
 
         boolean firstArgument = false;
-        for (Declare declare : declarations)
+        if (declarations != null)
         {
-            if (firstArgument)
+            for (Declare declare : declarations)
             {
-                writer.print(", ");
+                if (firstArgument)
+                {
+                    writer.print(", ");
+                }
+                writer.print(declare);
+                firstArgument = true;
             }
-            writer.print(declare);
-            firstArgument = true;
         }
 
         writer.print(")");

@@ -1,9 +1,9 @@
 package com.christophejung.container.statements;
 
-import com.christophejung.utils.HierarchicalWriter;
 import com.christophejung.container.Program;
 import com.christophejung.container.Type;
 import com.christophejung.container.methodexpressions.Statement;
+import com.christophejung.utils.HierarchicalWriter;
 
 import java.util.List;
 
@@ -25,15 +25,18 @@ public class ExpressionNewInstance extends Program implements Expression, Statem
         writer.print(target);
         writer.print("(");
 
-        boolean first = false;
-        for (Expression expression : values)
+        if (values != null)
         {
-            if (first)
+            boolean first = false;
+            for (Expression expression : values)
             {
-                writer.print(", ");
+                if (first)
+                {
+                    writer.print(", ");
+                }
+                writer.print(expression);
+                first = true;
             }
-            writer.print(expression);
-            first = true;
         }
 
         writer.print(')');

@@ -7,6 +7,7 @@ import com.christophejung.symbol.SymbolLookup;
 import com.christophejung.utils.StreamUtils;
 import com.christopherjung.reflectparser.ReflectScannerGenerator;
 import com.christopherjung.reflectparser.ReflectTLDGenerator;
+import com.christopherjung.reflectparser.RuleParser;
 import com.christopherjung.scanner.ScanJob;
 import com.christopherjung.scanner.Scanner;
 import com.christopherjung.translator.TDLParser;
@@ -31,7 +32,7 @@ public class Main
         {
             for (int i = 0; i < measurements; i++)
             {
-                ScanJob scanJob = new ScanJob(scanner, StreamUtils.getFileStream("test.java"));
+                ScanJob scanJob = new ScanJob(scanner, StreamUtils.getFileStream("test2.java"));
 
                 long start = System.currentTimeMillis();
                 o = parser.parse(scanJob);
@@ -46,7 +47,7 @@ public class Main
             e.printStackTrace();
         }
 
-
+/*
         ClassContainer classContainer = (ClassContainer) o;
 
         for (ClassStatement statement : classContainer.getClassStatements())
@@ -59,6 +60,8 @@ public class Main
                 System.out.println(SymbolLookup.lookup(container.getExpression()));
             }
         }
+*/
+
 
     }
 }

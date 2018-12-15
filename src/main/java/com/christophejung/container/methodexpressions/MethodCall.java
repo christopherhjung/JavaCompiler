@@ -24,14 +24,16 @@ public class MethodCall extends Program implements Statement, Expression
         writer.print("(");
 
         boolean first = false;
-        for (Expression expression : expressions)
-        {
-            if (first)
+        if(expressions != null){
+            for (Expression expression : expressions)
             {
-                writer.print(", ");
+                if (first)
+                {
+                    writer.print(", ");
+                }
+                writer.print(expression);
+                first = true;
             }
-            writer.print(expression);
-            first = true;
         }
 
         writer.print(")");
