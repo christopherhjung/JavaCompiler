@@ -1,7 +1,9 @@
 package com.christophejung.container;
 
+import com.christophejung.container.methodexpressions.Statement;
 import com.christophejung.utils.HierarchicalWriter;
 import com.christophejung.container.classexpressions.ClassStatement;
+import com.christopherjung.regex.State;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -10,11 +12,11 @@ import java.util.List;
 public class ClassContainer extends Program
 {
     private Type className;
-    private List<ClassStatement> classStatements;
-    private String superclass;
-    private List<String> interfaces;
+    private List<Statement> classStatements;
+    private Type superclass;
+    private List<Type> interfaces;
 
-    public ClassContainer(Type className, String superclass, List<String> interfaces, List<ClassStatement> classStatements)
+    public ClassContainer(Type className, Type superclass, List<Type> interfaces, List<Statement> classStatements)
     {
         this.className = className;
         this.superclass = superclass;
@@ -22,7 +24,7 @@ public class ClassContainer extends Program
         this.classStatements = classStatements;
     }
 
-    public List<ClassStatement> getClassStatements()
+    public List<Statement> getClassStatements()
     {
         return Collections.unmodifiableList(classStatements);
     }
@@ -33,7 +35,7 @@ public class ClassContainer extends Program
         writer.print("class ");
         writer.print(className);
 
-        if (superclass != null && !superclass.isEmpty())
+        if (superclass != null )
         {
             writer.print(" extends ");
             writer.print(superclass);
@@ -43,7 +45,7 @@ public class ClassContainer extends Program
         {
             writer.print(" implements ");
             boolean first = false;
-            for (String interfaceObj : interfaces)
+            for (Type interfaceObj : interfaces)
             {
                 if (first)
                 {
@@ -58,7 +60,7 @@ public class ClassContainer extends Program
         writer.println("{");
         writer.enterLevel();
 
-        for (ClassStatement expression : classStatements)
+        for (Statement expression : classStatements)
         {
             writer.print(expression);
             if( !writer.isNewLine() ) writer.println(";");

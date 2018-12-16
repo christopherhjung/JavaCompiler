@@ -15,6 +15,16 @@ public class MemberSelect extends Program implements Statement, Expression
         this.name = name;
     }
 
+    public Expression getExpression()
+    {
+        return expression;
+    }
+
+    public String getName()
+    {
+        return name;
+    }
+
     @Override
     public void write(HierarchicalWriter writer)
     {

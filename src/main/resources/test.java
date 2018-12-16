@@ -1,11 +1,15 @@
-public class Main
+
+public class Main extends String implements Test<String>
 {
+
+    int test = 9;
+
     public static void main()
     {
-        int num = 9;
+        int num = "HALLO".toString();
     }
 
-    void main(int t)
+    private void main(int t)
     {
         int num = 9;
     }

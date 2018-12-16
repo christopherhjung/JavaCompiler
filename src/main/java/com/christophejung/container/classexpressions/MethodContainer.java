@@ -2,21 +2,23 @@ package com.christophejung.container.classexpressions;
 
 import com.christophejung.container.Block;
 import com.christophejung.container.Program;
+import com.christophejung.container.Type;
 import com.christophejung.container.methodexpressions.Declare;
+import com.christophejung.container.methodexpressions.Statement;
 import com.christophejung.utils.HierarchicalWriter;
 
 import java.lang.reflect.Modifier;
 import java.util.List;
 
-public class MethodContainer extends Program implements ClassStatement
+public class MethodContainer extends Program implements Statement
 {
     private String methodName;
-    private String returnType;
+    private Type returnType;
     private Block expression;
     private int modifiers;
     private List<Declare> declarations;
 
-    public MethodContainer(String methodName, int modifiers, String returnType, List<Declare> declarations, Block expression)
+    public MethodContainer(String methodName, int modifiers, Type returnType, List<Declare> declarations, Block expression)
     {
         this.modifiers = modifiers;
         this.methodName = methodName;

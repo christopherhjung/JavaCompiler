@@ -1,12 +1,13 @@
 package com.christophejung;
 
 import com.christophejung.container.*;
-import com.christophejung.container.classexpressions.ClassDeclareAssign;
-import com.christophejung.container.classexpressions.ClassStatement;
 import com.christophejung.container.classexpressions.MethodContainer;
 import com.christophejung.container.methodexpressions.*;
 import com.christophejung.container.statements.*;
-import com.christopherjung.reflectparser.*;
+import com.christopherjung.reflectparser.ParserRule;
+import com.christopherjung.reflectparser.ScannerIgnore;
+import com.christopherjung.reflectparser.ScannerSingle;
+import com.christopherjung.reflectparser.ScannerToken;
 
 import java.util.List;
 
@@ -190,57 +191,52 @@ public class JavaParser
     @ScannerToken("<<")
     public static String shiftLeft = "<<";
 
-    @ParserRule("root -> clazz:class")
-    public static ClassContainer start(ClassContainer clazz)
+    @ParserRule("root -> imports:import* classes:class*")
+    public static ProgramFile start(List<Import> imports, List<ClassContainer> classes)
     {
-        return clazz;
+        return new ProgramFile("test", imports, classes);
     }
 
-    @ParserRule("package -> packageKeyword path:word")
+    @ParserRule("package -> packageKeyword path:word ';'")
     public static String packageImpl(String path)
     {
         return path;
     }
 
-    @ParserRule("import -> importKeyword path:word")
+    @ParserRule("import -> importKeyword path:word ';'")
     public static Import clazz(String path)
     {
         return new Import(path);
     }
 
     @ParserRule("class -> visibility? abstractKeyword? classKeyword className:type superclass:extends? interfaces:implements? '{' classStatements:classStatement* '}'")
-    public static ClassContainer classValue(String visibility, Type className, List<ClassStatement> classStatements, String superclass, List<String> interfaces)
+    public static ClassContainer classValue(String visibility, Type className, List<Statement> classStatements, Type superclass, List<Type> interfaces)
     {
         return new ClassContainer(className, superclass, interfaces, classStatements);
     }
 
-    @ParserRule("extends -> extendsKeyword className:word")
-    public static String extendsExpression(String className)
+    @ParserRule("extends -> extendsKeyword type")
+    public static Type extendsExpression(Type type)
     {
-        return className;
+        return type;
     }
 
-    @ParserRule("implements -> implementsKeyword interfaces:interfaces{min=1,separator=','}")
-    public static List<String> implementsExpression(List<String> interfaces)
+    @ParserRule("implements -> implementsKeyword interfaces:type{min=1,separator=','}")
+    public static List<Type> implementsExpression(List<Type> interfaces)
     {
         return interfaces;
     }
 
-    @ParserRule("classStatement -> visibility? varType:type assign ';'")
-    public static ClassDeclareAssign classDeclareAssign(Type varType, Assign assign)
+    //@ParserRule("classStatement -> statement:declare ';'")
+    @ParserRule("classStatement -> statement:block")
+    @ParserRule("classStatement -> statement:method")
+    public static Statement classDeclareAssign(Statement statement)
     {
-        return new ClassDeclareAssign(varType, assign);
+        return statement;
     }
 
-    @ParserRule("classStatement -> stat:block")
-    @ParserRule("classStatement -> stat:method")
-    public static ClassStatement classDeclareAssign(ClassStatement stat)
-    {
-        return stat;
-    }
-
-    @ParserRule("method -> visibility? staticKeyword? returnType:word methodName:word '(' declarations:declare{separator=','} ')' inner:block")
-    public static MethodContainer nonEmptyObject(String visibility, String staticKeyword, String methodName, String returnType, List<Declare> declarations, Block inner)
+    @ParserRule("modifier -> visibility? staticKeyword?")
+    public static Integer modifier(String visibility, String staticKeyword)
     {
         int modifier = 0;
 
@@ -262,6 +258,26 @@ public class JavaParser
             modifier |= 8;
         }
 
+        return modifier;
+    }
+
+    @ParserRule("classStatement -> modifier? varType:type varName:word '=' expression ';'")
+    public static Statement var(Integer modifier, Type varType, String varName, Expression expression)
+    {
+        if (modifier == null)
+        {
+            modifier = 0;
+        }
+        return new DeclareAssign(varType, varName, expression);
+    }
+
+    @ParserRule("method -> modifier? returnType:type methodName:word '(' declarations:declare{separator=','} ')' inner:block")
+    public static MethodContainer nonEmptyObject(Integer modifier, String methodName, Type returnType, List<Declare> declarations, Block inner)
+    {
+        if (modifier == null)
+        {
+            modifier = 0;
+        }
         return new MethodContainer(methodName, modifier, returnType, declarations, inner);
     }
 
@@ -684,7 +700,7 @@ public class JavaParser
         return new ExpressionNewArray(type, dimension);
     }
 
-    @ParserRule("member -> member '.' name:(word | classKeyword )")
+    @ParserRule("member -> member '.' name:( word | classKeyword )")
     public static Expression member(Expression member, String name)
     {
         return new MemberSelect(member, name);

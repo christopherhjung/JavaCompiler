@@ -37,23 +37,41 @@ public class HierarchicalWriter
 
     public void println(Collection<?> objs)
     {
+        if (objs == null)
+        {
+            return;
+        }
+
         for (Object obj : objs)
         {
             println(obj);
         }
     }
 
-    public void println(Collection<?> objs, String seperator)
+    public void printSeparated(Collection<?> objs, String separator)
     {
         boolean first = false;
         for (Object obj : objs)
         {
             if (first)
             {
-                print(seperator);
+                println(separator);
             }
-            println(obj);
+            print(obj);
             first = true;
+        }
+    }
+
+    public void println(Collection<?> objs, String separator)
+    {
+        if(objs == null){
+            return;
+        }
+
+        for (Object obj : objs)
+        {
+            print(obj);
+            println(separator);
         }
     }
 

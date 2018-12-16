@@ -1,10 +1,9 @@
 package com.christophejung.symbol;
 
 import com.christophejung.container.Block;
-import com.christophejung.container.ClassContainer;
 import com.christophejung.container.Type;
 import com.christophejung.container.methodexpressions.*;
-import com.christophejung.container.statements.Expression;
+import com.christophejung.container.statements.ExpressionThis;
 
 import java.util.HashMap;
 import java.util.List;
@@ -82,6 +81,15 @@ public class SymbolLookup
 
             lookupRecursive(ifElseStatement.getIfBranch());
             lookupRecursive(ifElseStatement.getElseBranch());
+        }
+        else if (statement instanceof MemberSelect)
+        {
+            MemberSelect memberSelect = (MemberSelect) statement;
+
+            if (memberSelect.getExpression() instanceof ExpressionThis)
+            {
+
+            }
         }
         else if (statement instanceof Declare)
         {

@@ -22,7 +22,7 @@ public class ProgramFile extends Program
     {
         writer.print(name);
         writer.println();
-        writer.println(imports);
+        writer.println(imports,";");
         writer.println();
         writer.println(classes);
     }
